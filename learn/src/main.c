@@ -21,13 +21,57 @@
 */
 #include "lualib.h"
 
+void dump_stack(lua_State *L)
+{
+	int top = lua_gettop(L); /* 获取顶部元素索引，即总元素个数 */
+	for (int i = 1; i <= top; i++)
+	{
+		int t = lua_type(L, i); /* 获取元素类型 */
+		switch (t)
+		{
+		case LUA_TSTRING:
+		{
+			printf("'%s'", lua_tostring(L, i)); // 转换成字符串类型
+			break;
+		}
+
+		case LUA_TBOOLEAN:
+		{
+			printf(lua_toboolean(L, i) ? "true" : "false"); // bool类型
+			break;
+		}
+
+		case LUA_TNUMBER:
+		{
+			if (lua_isinteger(L, i))
+			{
+				printf("%lld", lua_tointeger(L, i));
+			}
+			else
+			{
+				printf("%g", lua_tonumber(L, i));
+			}
+			break;
+		}
+
+		default:
+		{
+			printf("%s", lua_typename(L, t)); // 其他类型名称
+			break;
+		}
+		}
+		printf("	");
+	}
+	printf("\n");
+}
+
 void error(lua_State *L, const char *fmt, ...)
 {
 	va_list argp;
 	va_start(argp, fmt);
 	vfprintf(stderr, fmt, argp);
 	va_end(argp);
-	lua_close(L);						/*发生错误，直接关闭lua状态机*/
+	lua_close(L); /*发生错误，直接关闭lua状态机*/
 	exit(EXIT_FAILURE);
 }
 
