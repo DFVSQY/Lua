@@ -223,8 +223,19 @@ LUA_API int   (lua_compare) (lua_State *L, int idx1, int idx2, int op);
 LUA_API void        (lua_pushnil) (lua_State *L);
 LUA_API void        (lua_pushnumber) (lua_State *L, lua_Number n);
 LUA_API void        (lua_pushinteger) (lua_State *L, lua_Integer n);
+
+/*
+lua中的字符串不以0字符结束，所以为了支持lua中这类型的字符串压入需要使用该版本，
+通过显式地指定字符串长度确定字符串何时结束
+*/
 LUA_API const char *(lua_pushlstring) (lua_State *L, const char *s, size_t len);
+
+/*
+对于以0字符结束的字符串，可以使用该版本进行压入
+*/
 LUA_API const char *(lua_pushstring) (lua_State *L, const char *s);
+
+
 LUA_API const char *(lua_pushvfstring) (lua_State *L, const char *fmt,
                                                       va_list argp);
 LUA_API const char *(lua_pushfstring) (lua_State *L, const char *fmt, ...);
