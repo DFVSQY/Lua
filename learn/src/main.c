@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
 'lua.h'中声明了lua提供的基础函数,包括创建lua环境，调用lua函数，读写lua环境中的全局变量，注册可被lua调用的函数等等，
@@ -18,6 +20,16 @@
 定义一些用于打开lua库的函数
 */
 #include "lualib.h"
+
+void error(lua_State *L, const char *fmt, ...)
+{
+	va_list argp;
+	va_start(argp, fmt);
+	vfprintf(stderr, fmt, argp);
+	va_end(argp);
+	lua_close(L);						/*发生错误，直接关闭lua状态机*/
+	exit(EXIT_FAILURE);
+}
 
 int main()
 {
