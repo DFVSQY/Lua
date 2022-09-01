@@ -163,12 +163,17 @@ LUA_API int lua_absindex (lua_State *L, int idx) {
          : cast_int(L->top - L->ci->func) + idx;
 }
 
-
+/* 
+获取stack中顶层元素的索引，即stack中元素个数
+*/
 LUA_API int lua_gettop (lua_State *L) {
   return cast_int(L->top - (L->ci->func + 1));
 }
 
-
+/*
+设置stack元素个数，用于扩展或者收缩stack的大小，
+idx也可传递负数，参考lua_pop宏
+*/
 LUA_API void lua_settop (lua_State *L, int idx) {
   StkId func = L->ci->func;
   lua_lock(L);
@@ -203,6 +208,11 @@ static void reverse (lua_State *L, StkId from, StkId to) {
 /*
 ** Let x = AB, where A is a prefix of length 'n'. Then,
 ** rotate x n == BA. But BA == (A^r . B^r)^r.
+
+Lua5.3引入的函数，循环移动指定范围的数字，详情参考：
+https://stackoverflow.com/questions/52241580/what-does-lua-rotate-do
+
+一个多功能函数，lua_remove和lua_insert宏采用该函数实现
 */
 LUA_API void lua_rotate (lua_State *L, int idx, int n) {
   StkId p, t, m;
@@ -218,7 +228,9 @@ LUA_API void lua_rotate (lua_State *L, int idx, int n) {
   lua_unlock(L);
 }
 
-
+/* 
+将fromidx位置处的元素拷贝一份放到toidx位置处
+*/
 LUA_API void lua_copy (lua_State *L, int fromidx, int toidx) {
   TValue *fr, *to;
   lua_lock(L);
@@ -233,7 +245,9 @@ LUA_API void lua_copy (lua_State *L, int fromidx, int toidx) {
   lua_unlock(L);
 }
 
-
+/*  
+拷贝指定索引处的元素一份放到stack顶部
+*/
 LUA_API void lua_pushvalue (lua_State *L, int idx) {
   lua_lock(L);
   setobj2s(L, L->top, index2addr(L, idx));

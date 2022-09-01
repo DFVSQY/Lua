@@ -351,6 +351,9 @@ LUA_API void      (lua_setallocf) (lua_State *L, lua_Alloc f, void *ud);
 #define lua_tonumber(L,i)	lua_tonumberx(L,(i),NULL)
 #define lua_tointeger(L,i)	lua_tointegerx(L,(i),NULL)
 
+/* 
+用于弹出stack中指定个数的元素
+*/
 #define lua_pop(L,n)		lua_settop(L, -(n)-1)
 
 #define lua_newtable(L)		lua_createtable(L, 0, 0)
@@ -375,11 +378,19 @@ LUA_API void      (lua_setallocf) (lua_State *L, lua_Alloc f, void *ud);
 
 #define lua_tostring(L,i)	lua_tolstring(L, (i), NULL)
 
-
+/*  
+在指定位置处插入一个空位
+*/
 #define lua_insert(L,idx)	lua_rotate(L, (idx), 1)
 
+/*  
+移除指定位置处的元素
+*/
 #define lua_remove(L,idx)	(lua_rotate(L, (idx), -1), lua_pop(L, 1))
 
+/* 
+弹出指定位置的元素
+*/
 #define lua_replace(L,idx)	(lua_copy(L, -1, (idx)), lua_pop(L, 1))
 
 /* }============================================================== */
