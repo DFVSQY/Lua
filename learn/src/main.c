@@ -75,6 +75,84 @@ void error(lua_State *L, const char *fmt, ...)
 	exit(EXIT_FAILURE);
 }
 
+void test_operate()
+{
+	lua_State *L = luaL_newstate();
+
+	lua_pushboolean(L, 1);
+	lua_pushnumber(L, 10);
+	lua_pushnil(L);
+	lua_pushstring(L, "hello");
+
+	/*
+	输出：true,  10, nil, 'hello'
+	*/
+	dump_stack(L);
+
+	/*
+	拷贝-4位置处的元素拷贝一份放入栈顶
+	*/
+	lua_pushvalue(L, -4);
+
+	/*
+	输出：true, 10, nil, 'hello', true
+	*/
+	dump_stack(L);
+
+	/*
+	使用栈顶元素替换3位置处的元素并移除栈顶元素
+	*/
+	lua_replace(L, 3);
+
+	/*
+	输出：true, 10, true, 'hello'
+	*/
+	dump_stack(L);
+
+	/*
+	设置stack元素个数，此处扩展两个空位
+	*/
+	lua_settop(L, 6);
+
+	/*
+	输出：true, 10, true, 'hello', nil, nil
+	*/
+	dump_stack(L);
+
+	/*
+	循环移动后四位元素
+	*/
+	lua_rotate(L, 3, 1);
+
+	/*
+	输出：true, 10, nil, true, 'hello', nil
+	*/
+	dump_stack(L);
+
+	/*
+	移除第三高位的元素
+	*/
+	lua_remove(L, -3);
+
+	/*
+	输出：true, 10, nil, 'hello' nil
+	*/
+	dump_stack(L);
+
+	/*
+	设置stack元素个数，此处移除后四位元素
+	*/
+	lua_settop(L, -5);
+
+	/*
+	输出：true
+	*/
+	dump_stack(L);
+
+	lua_close(L);
+	return 0;
+}
+
 int main()
 {
 	char buff[256];
