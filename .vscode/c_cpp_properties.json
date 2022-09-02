@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/learn/headers"
+            ],
+            "defines": [
+                "LUA_USER_H=\"ltests.h\"",
+                "LUA_USE_WINDOWS",
+                "LUA_COMPAT_5_2"
+            ],
+            "cStandard": "c99",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "F:/msys64/mingw64/bin/gcc.exe"
+        }
+    ],
+    "version": 4
+}

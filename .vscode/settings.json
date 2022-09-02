@@ -3,5 +3,7 @@
 		"lualib.h": "c",
 		"lua.h": "c",
 		"lauxlib.h": "c"
-	}
+	},
+	"C_Cpp.default.cppStandard": "gnu++98",
+	"C_Cpp.default.intelliSenseMode": "gcc-x64"
 }
