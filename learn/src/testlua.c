@@ -152,7 +152,6 @@ void test_operate()
 	dump_stack(L);
 
 	lua_close(L);
-	return 0;
 }
 
 void simple_interpreter()
