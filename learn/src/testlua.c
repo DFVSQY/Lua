@@ -237,12 +237,75 @@ void test_secure_foo()
 	*/
 	luaL_openlibs(L);
 
-	/* 
+	/*
 	对于绝大部分主要的Lua APIs，任何一次调用都有可能引起异常错误，为了正确地处理这些错误，
 	必须在lua环境（存在一个可以catch error的context）中调用这些函数，这样自己写的c代码就
 	可以在保护模式下执行了
 	*/
 	printf("secure_foo call, result:%d\n", secure_foo(L));
+
+	lua_close(L);
+}
+
+int get_global_int(lua_State *L, const char *var)
+{
+	int isnum, result;
+
+	/*
+	将全局变量对应的值放入stack，并返回该值对应的类型
+	*/
+	lua_getglobal(L, var);
+
+	/*  
+	尝试将stack顶部的元素转换成lua_Integer，失败则返回0，
+	参数3：用于标识是否成功转换
+	*/
+	result = (int)lua_tointegerx(L, -1, &isnum);
+
+	if (!isnum)
+		error(L, "'%s' should be a number\n", var);
+
+	/* 
+	弹出一个stack元素，即移除stack顶部元素
+	*/
+	lua_pop(L, 1);
+	return result;
+}
+
+void load_width_and_height(lua_State *L, const char *fname, int *w, int *h)
+{
+	/*
+	luaL_loadfile：
+		载入文件代码并编译成chunk块，如果没有异常，则将chunk块做为一个Lua Function压入stack，
+		如果有异常，则将error message压入stack
+		成功载入并编译返回0，否则返回其他错误码
+
+	lua_pcall：
+		从stack中弹出被压入的函数并在保护模式下执行代码，无错则返回0，有错则将错误信息放入stack中
+	*/
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
+
+	*w = get_global_int(L, "width");
+	*h = get_global_int(L, "height");
+}
+
+void test_load_width_and_height()
+{
+	/*
+	创建一个lua状态机，此时lua环境不包含任何预定义函数，甚至print也不包含，
+	为了使lua足够小，所有的标准库都是以独立的package存在，如果不需要就可以不使用它们
+	*/
+	lua_State *L = luaL_newstate();
+
+	/*
+	该函数用于打开所有的lua标准库
+	*/
+	luaL_openlibs(L);
+
+	int w, h;
+	load_width_and_height(L, "learn\\lua\\win_config.lua", &w, &h);
+	printf("width:%d, height:%d\n", w, h);
 
 	lua_close(L);
 }

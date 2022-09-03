@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_secure_foo();
+	test_load_width_and_height();
 
 	printf("run finish!\n");
 	return 0;

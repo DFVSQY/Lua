@@ -82,7 +82,11 @@ LUALIB_API void (luaL_unref) (lua_State *L, int t, int ref);
 
 LUALIB_API int (luaL_loadfilex) (lua_State *L, const char *filename,
                                                const char *mode);
-
+/*
+	载入文件代码并编译成chunk块，如果没有异常，则将chunk块做为一个Lua Function压入stack，
+	如果有异常，则将error message压入stack
+	成功载入并编译返回0，否则返回其他错误码
+*/
 #define luaL_loadfile(L,f)	luaL_loadfilex(L,f,NULL)
 
 LUALIB_API int (luaL_loadbufferx) (lua_State *L, const char *buff, size_t sz,

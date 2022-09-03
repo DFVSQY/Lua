@@ -285,6 +285,9 @@ LUA_API void  (lua_callk) (lua_State *L, int nargs, int nresults,
 
 LUA_API int   (lua_pcallk) (lua_State *L, int nargs, int nresults, int errfunc,
                             lua_KContext ctx, lua_KFunction k);
+/*
+从stack中弹出被压入的函数并在保护模式下执行代码，无错则返回0，有错则将错误信息放入stack中
+*/
 #define lua_pcall(L,n,r,f)	lua_pcallk(L, (n), (r), (f), 0, NULL)
 
 LUA_API int   (lua_load) (lua_State *L, lua_Reader reader, void *dt,

@@ -1041,7 +1041,10 @@ static int panic (lua_State *L) {
   return 0;  /* return to Lua to abort */
 }
 
-
+/*
+创建一个lua状态机，此时lua环境不包含任何预定义函数，甚至print也不包含，
+为了使lua足够小，所有的标准库都是以独立的package存在，如果不需要就可以不使用它们
+*/
 LUALIB_API lua_State *luaL_newstate (void) {
   lua_State *L = lua_newstate(l_alloc, NULL);
   if (L) lua_atpanic(L, &panic);

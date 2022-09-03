@@ -367,6 +367,10 @@ LUA_API lua_Number lua_tonumberx (lua_State *L, int idx, int *pisnum) {
 }
 
 
+/*  
+	尝试将stack顶部的元素转换成lua_Integer，失败则返回0，
+	参数3：用于标识是否成功转换
+*/
 LUA_API lua_Integer lua_tointegerx (lua_State *L, int idx, int *pisnum) {
   lua_Integer res;
   const TValue *o = index2addr(L, idx);
@@ -616,6 +620,9 @@ static int auxgetstr (lua_State *L, const TValue *t, const char *k) {
 }
 
 
+/*
+将全局变量对应的值放入stack，并返回该值对应的类型
+*/
 LUA_API int lua_getglobal (lua_State *L, const char *name) {
   Table *reg = hvalue(&G(L)->l_registry);
   lua_lock(L);
