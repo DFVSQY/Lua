@@ -16,7 +16,6 @@
                 "-I",
                 "learn\\headers",
                 "${workspaceFolder}\\learn\\src\\main.c",
-                "${workspaceFolder}\\learn\\src\\testc.c",
                 "${workspaceFolder}\\learn\\src\\testlua.c",
                 "${workspaceFolder}\\lapi.c",
                 "${workspaceFolder}\\lauxlib.c",

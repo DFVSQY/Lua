@@ -28,7 +28,7 @@
 					"ignoreFailures": true
 				}
 			],
-			"preLaunchTask": "Build"
+			"preLaunchTask": "构建"
 		}
 	]
 }
