@@ -1004,7 +1004,21 @@ LUALIB_API const char *luaL_gsub (lua_State *L, const char *s, const char *p,
   return lua_tostring(L, -1);
 }
 
+/*  
+控制Lua分配内存的函数:
+参数1：用户提供的数据
+参数2：用于分配或者释放的地址块的地址
+参数3：地址块的初始尺寸
+参数4：请求的地址块尺寸
 
+Lua中使用NULL代表0size的地址块，所以如果nsize为0，ptr所指向的地址块会被清空并返回NULL
+
+当ptr为NULL时，需要分配指定的nsize大小的地址块，如果不能成功分配，则返回NULL
+
+当ptr不为NULL，nsize不为0时，重新分配地址块并返回新地址（可能与旧地址相同也可能不同）
+
+分配器要负责管理分配和释放的内存
+*/
 static void *l_alloc (void *ud, void *ptr, size_t osize, size_t nsize) {
   (void)ud; (void)osize;  /* not used */
   if (nsize == 0) {

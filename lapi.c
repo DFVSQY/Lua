@@ -1176,7 +1176,10 @@ LUA_API void lua_len (lua_State *L, int idx) {
   lua_unlock(L);
 }
 
-
+/* 
+返回lua_State的内存分配函数，
+如果ud不为NULL，则记录下设置分配函数时的用户数据
+*/
 LUA_API lua_Alloc lua_getallocf (lua_State *L, void **ud) {
   lua_Alloc f;
   lua_lock(L);
@@ -1186,7 +1189,9 @@ LUA_API lua_Alloc lua_getallocf (lua_State *L, void **ud) {
   return f;
 }
 
-
+/*  
+设置lua_State的内存分配函数和用户数据
+*/
 LUA_API void lua_setallocf (lua_State *L, lua_Alloc f, void *ud) {
   lua_lock(L);
   G(L)->ud = ud;
