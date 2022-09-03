@@ -11,7 +11,7 @@ void func()
 	/*  
 	longjmp: go back to place buf is pointing to and return second param(here is 1)
 	*/
-	longjmp(buf, 1);
+	longjmp(buf, 1);							// setjmp will return then second param(here is 1，it can't be zero)
 
 	printf("action func in step 2\n");
 }
@@ -28,7 +28,10 @@ int main()
 	/* 
 	setjmp: uses buf to remember current position and returns 0
 	*/
-	if (setjmp(buf))
+	int ret = setjmp(buf);
+	printf("ret:%d\n", ret);
+
+	if (ret != 0)
 	{
 		printf("main action1\n");
 	}
