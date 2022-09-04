@@ -439,6 +439,20 @@ void set_color_field(lua_State *L, const char *index, int value)
 	lua_settable(L, -3);
 }
 
+void set_color_field_simple(lua_State *L, const char *index, int value)
+{
+	lua_pushnumber(L, (double)value / MAX_COLOR); /* value */
+
+	/*
+	用于设置table元素的值，相当于免去了key入栈的过程，
+	只有当key为字符串类型时才可以使用该简化版本，
+
+	Does the equivalent to t[k] = v, where t is the value at the given index and v is the value at the top of the stack.
+	This function pops the value from the stack. As in Lua, this function may trigger a metamethod for the "newindex" event.
+	*/
+	lua_setfield(L, -2, index);
+}
+
 void set_global_color(lua_State *L, ColorTable *ct)
 {
 	int i = 0;
@@ -460,6 +474,27 @@ void set_global_color(lua_State *L, ColorTable *ct)
 	}
 }
 
+void set_global_color_simple(lua_State *L, ColorTable *ct)
+{
+	int i = 0;
+	while (1)
+	{
+		ColorTable *c = &ct[i++];
+		if (c->name == NULL)
+			break;
+
+		/* Creates a new empty table and pushes it onto the stack */
+		lua_newtable(L);
+
+		set_color_field_simple(L, "red", c->red);
+		set_color_field_simple(L, "green", c->green);
+		set_color_field_simple(L, "blue", c->blue);
+
+		/* Pops a value from the stack and sets it as the new value of global name */
+		lua_setglobal(L, c->name);
+	}
+}
+
 void test_set_global_color()
 {
 	lua_State *L = luaL_newstate();
@@ -472,6 +507,26 @@ void test_set_global_color()
 		{"BLUE", 0, 0, MAX_COLOR},
 		{NULL, 0, 0, 0}};
 	set_global_color(L, color_tables);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}
+
+void test_set_global_color_simple()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	ColorTable color_tables[] = {
+		{"WHITE", MAX_COLOR, MAX_COLOR, MAX_COLOR},
+		{"RED", MAX_COLOR, 0, 0},
+		{"GREEN", 0, MAX_COLOR, 0},
+		{"BLUE", 0, 0, MAX_COLOR},
+		{NULL, 0, 0, 0}};
+	set_global_color_simple(L, color_tables);
 
 	const char *fname = "learn\\lua\\win_config.lua";
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))

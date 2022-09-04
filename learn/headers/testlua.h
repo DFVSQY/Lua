@@ -44,6 +44,12 @@ void test_get_rgb_color_simple();
 
 void set_color_field(lua_State *L, const char *index, int value);
 
+void set_color_field_simple(lua_State *L, const char *index, int value);
+
 void set_global_color(lua_State *L, ColorTable *ct);
 
+void set_global_color_simple(lua_State *L, ColorTable *ct);
+
 void test_set_global_color();
+
+void test_set_global_color_simple();
