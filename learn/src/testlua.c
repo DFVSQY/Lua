@@ -356,6 +356,33 @@ float get_color_filed(lua_State *L, const char *var)
 	return result;
 }
 
+/* get_color_filed功能实现的简化版本 */
+float get_color_filed_simple(lua_State *L, const char *var)
+{
+	/*
+	lua_getfield：
+	实现了lua_pushstring(L, var); lua_gettable(L, -2)组合的相同的功能，
+	但具体实现上不会再把var压入stack中，table依旧位于stack顶部
+
+	Pushes onto the stack the value t[k], where t is the value at the given index. As in Lua, this function may trigger a metamethod for the "index" event.
+	Returns the type of the pushed value.
+	*/
+	if (lua_getfield(L, -1, var) != LUA_TNUMBER)
+		error(L, "invalid component '%s' in color", var);
+
+	/*
+	Converts the Lua value at the given index to the C type lua_Number. 
+	The Lua value must be a number or a string convertible to a number; 
+	otherwise, lua_tonumberx returns 0.
+	Equivalent to lua_tonumberx with isnum equal to NULL.
+	*/
+	int result = (int)(lua_tonumber(L, -1) * MAX_COLOR);
+
+	lua_pop(L, 1);
+
+	return result;
+}
+
 void get_rgb_color(lua_State *L, float *r, float *g, float *b)
 {
 	lua_getglobal(L, "background");
@@ -367,7 +394,29 @@ void get_rgb_color(lua_State *L, float *r, float *g, float *b)
 	*b = get_color_filed(L, "b");
 }
 
+void get_rgb_color_simple(lua_State *L, float *r, float *g, float *b)
+{
+	lua_getglobal(L, "background");
+	if (!lua_istable(L, -1))
+		error(L, "'background' is not a table");
+
+	*r = get_color_filed_simple(L, "r");
+	*g = get_color_filed_simple(L, "g");
+	*b = get_color_filed_simple(L, "b");
+}
+
 void test_get_rgb_color()
+{
+	lua_State *L = new_lua_state_with_win_cfg();
+
+	float r, g, b;
+	get_rgb_color(L, &r, &g, &b);
+	printf("r:%.0f g:%.0f, b:%.0f\n", r, g, b);
+
+	lua_close(L);
+}
+
+void test_get_rgb_color_simple()
 {
 	lua_State *L = new_lua_state_with_win_cfg();
 

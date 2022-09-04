@@ -647,6 +647,10 @@ LUA_API int lua_gettable (lua_State *L, int idx) {
 }
 
 
+/*
+Pushes onto the stack the value t[k], where t is the value at the given index. As in Lua, this function may trigger a metamethod for the "index" event.
+Returns the type of the pushed value.
+*/
 LUA_API int lua_getfield (lua_State *L, int idx, const char *k) {
   lua_lock(L);
   return auxgetstr(L, index2addr(L, idx), k);

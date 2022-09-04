@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_set_global_color();
+	test_get_rgb_color_simple();
 
 	printf("run finish!\n");
 	return 0;

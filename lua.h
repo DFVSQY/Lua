@@ -351,6 +351,12 @@ LUA_API void      (lua_setallocf) (lua_State *L, lua_Alloc f, void *ud);
 
 #define lua_getextraspace(L)	((void *)((char *)(L) - LUA_EXTRASPACE))
 
+/*
+Converts the Lua value at the given index to the C type lua_Number. 
+The Lua value must be a number or a string convertible to a number; 
+otherwise, lua_tonumberx returns 0.
+Equivalent to lua_tonumberx with isnum equal to NULL.
+*/
 #define lua_tonumber(L,i)	lua_tonumberx(L,(i),NULL)
 #define lua_tointeger(L,i)	lua_tointegerx(L,(i),NULL)
 

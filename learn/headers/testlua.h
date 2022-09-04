@@ -32,9 +32,15 @@ lua_State *new_lua_state_with_win_cfg();
 
 void get_rgb_color(lua_State *L, float *r, float *g, float *b);
 
+void get_rgb_color_simple(lua_State *L, float *r, float *g, float *b);
+
 float get_color_filed(lua_State *L, const char *var);
 
+float get_color_filed_simple(lua_State *L, const char *var);
+
 void test_get_rgb_color();
+
+void test_get_rgb_color_simple();
 
 void set_color_field(lua_State *L, const char *index, int value);
 
