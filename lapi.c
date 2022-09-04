@@ -630,6 +630,13 @@ LUA_API int lua_getglobal (lua_State *L, const char *name) {
 }
 
 
+/*
+Pushes onto the stack the value t[k], where t is the value at the given index and k is the value at the top of the stack.
+
+This function pops the key from the stack, pushing the resulting value in its place. As in Lua, this function may trigger a metamethod for the "index" event (see §2.4).
+
+Returns the type of the pushed value.
+*/
 LUA_API int lua_gettable (lua_State *L, int idx) {
   StkId t;
   lua_lock(L);

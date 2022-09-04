@@ -256,7 +256,7 @@ int get_global_int(lua_State *L, const char *var)
 	*/
 	lua_getglobal(L, var);
 
-	/*  
+	/*
 	尝试将stack顶部的元素转换成lua_Integer，失败则返回0，
 	参数3：用于标识是否成功转换
 	*/
@@ -265,7 +265,7 @@ int get_global_int(lua_State *L, const char *var)
 	if (!isnum)
 		error(L, "'%s' should be a number\n", var);
 
-	/* 
+	/*
 	弹出一个stack元素，即移除stack顶部元素
 	*/
 	lua_pop(L, 1);
@@ -306,6 +306,74 @@ void test_load_width_and_height()
 	int w, h;
 	load_width_and_height(L, "learn\\lua\\win_config.lua", &w, &h);
 	printf("width:%d, height:%d\n", w, h);
+
+	lua_close(L);
+}
+
+lua_State *new_lua_state_with_win_cfg()
+{
+	/*
+	创建一个lua状态机，此时lua环境不包含任何预定义函数，甚至print也不包含，
+	为了使lua足够小，所有的标准库都是以独立的package存在，如果不需要就可以不使用它们
+	*/
+	lua_State *L = luaL_newstate();
+
+	/*
+	该函数用于打开所有的lua标准库
+	*/
+	luaL_openlibs(L);
+
+	/*
+	luaL_loadfile：
+		载入文件代码并编译成chunk块，如果没有异常，则将chunk块做为一个Lua Function压入stack，
+		如果有异常，则将error message压入stack
+		成功载入并编译返回0，否则返回其他错误码
+
+	lua_pcall：
+		从stack中弹出被压入的函数并在保护模式下执行代码，无错则返回0，有错则将错误信息放入stack中
+	*/
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
+
+	return L;
+};
+
+float get_color_filed(lua_State *L, const char *var)
+{
+	int result, isnum;
+	lua_pushstring(L, var);
+
+	/* 
+	table原本在stack顶部，压入string后变成了-2位置，
+	*/
+	lua_gettable(L, -2);
+
+	result = (int)(lua_tonumberx(L, -1, &isnum) * MAX_COLOR);
+	if (!isnum)
+		error(L, "invalid component '%s' in color", var);
+	lua_pop(L, 1);
+	return result;
+}
+
+void get_rgb_color(lua_State *L, float *r, float *g, float *b)
+{
+	lua_getglobal(L, "background");
+	if (!lua_istable(L, -1))
+		error(L, "'background' is not a table");
+
+	*r = get_color_filed(L, "r");
+	*g = get_color_filed(L, "g");
+	*b = get_color_filed(L, "b");
+}
+
+void test_get_rgb_color()
+{
+	lua_State *L = new_lua_state_with_win_cfg();
+
+	float r, g, b;
+	get_rgb_color(L, &r, &g, &b);
+	printf("r:%.0f g:%.0f, b:%.0f\n", r, g, b);
 
 	lua_close(L);
 }
