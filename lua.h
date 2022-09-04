@@ -359,6 +359,7 @@ LUA_API void      (lua_setallocf) (lua_State *L, lua_Alloc f, void *ud);
 */
 #define lua_pop(L,n)		lua_settop(L, -(n)-1)
 
+/* Creates a new empty table and pushes it onto the stack */
 #define lua_newtable(L)		lua_createtable(L, 0, 0)
 
 #define lua_register(L,n,f) (lua_pushcfunction(L, (f)), lua_setglobal(L, (n)))

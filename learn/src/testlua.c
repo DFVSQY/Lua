@@ -344,7 +344,7 @@ float get_color_filed(lua_State *L, const char *var)
 	int result, isnum;
 	lua_pushstring(L, var);
 
-	/* 
+	/*
 	table原本在stack顶部，压入string后变成了-2位置，
 	*/
 	lua_gettable(L, -2);
@@ -374,6 +374,59 @@ void test_get_rgb_color()
 	float r, g, b;
 	get_rgb_color(L, &r, &g, &b);
 	printf("r:%.0f g:%.0f, b:%.0f\n", r, g, b);
+
+	lua_close(L);
+}
+
+void set_color_field(lua_State *L, const char *index, int value)
+{
+	lua_pushstring(L, index);					  /* key */
+	lua_pushnumber(L, (double)value / MAX_COLOR); /* value */
+
+	/*
+	Does the equivalent to t[k] = v, where t is the value at the given index, v is the value at the top of the stack, and k is the value just below the top.
+	This function pops both the key and the value from the stack. As in Lua, this function may trigger a metamethod for the "newindex" event
+	*/
+	lua_settable(L, -3);
+}
+
+void set_global_color(lua_State *L, ColorTable *ct)
+{
+	int i = 0;
+	while (1)
+	{
+		ColorTable *c = &ct[i++];
+		if (c->name == NULL)
+			break;
+
+		/* Creates a new empty table and pushes it onto the stack */
+		lua_newtable(L);
+
+		set_color_field(L, "red", c->red);
+		set_color_field(L, "green", c->green);
+		set_color_field(L, "blue", c->blue);
+
+		/* Pops a value from the stack and sets it as the new value of global name */
+		lua_setglobal(L, c->name);
+	}
+}
+
+void test_set_global_color()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	ColorTable color_tables[] = {
+		{"WHITE", MAX_COLOR, MAX_COLOR, MAX_COLOR},
+		{"RED", MAX_COLOR, 0, 0},
+		{"GREEN", 0, MAX_COLOR, 0},
+		{"BLUE", 0, 0, MAX_COLOR},
+		{NULL, 0, 0, 0}};
+	set_global_color(L, color_tables);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
 
 	lua_close(L);
 }

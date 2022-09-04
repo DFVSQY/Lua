@@ -4,6 +4,12 @@
 
 #define MAX_COLOR 255
 
+typedef struct
+{
+	char *name;
+	unsigned char red, green, blue;
+} ColorTable;
+
 void dump_stack(lua_State *L);
 
 void error(lua_State *L, const char *fmt, ...);
@@ -29,3 +35,9 @@ void get_rgb_color(lua_State *L, float *r, float *g, float *b);
 float get_color_filed(lua_State *L, const char *var);
 
 void test_get_rgb_color();
+
+void set_color_field(lua_State *L, const char *index, int value);
+
+void set_global_color(lua_State *L, ColorTable *ct);
+
+void test_set_global_color();

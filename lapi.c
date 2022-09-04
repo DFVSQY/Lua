@@ -784,6 +784,9 @@ static void auxsetstr (lua_State *L, const TValue *t, const char *k) {
 }
 
 
+/*
+Pops a value from the stack and sets it as the new value of global name
+*/
 LUA_API void lua_setglobal (lua_State *L, const char *name) {
   Table *reg = hvalue(&G(L)->l_registry);
   lua_lock(L);  /* unlock done in 'auxsetstr' */
@@ -791,6 +794,10 @@ LUA_API void lua_setglobal (lua_State *L, const char *name) {
 }
 
 
+/*
+Does the equivalent to t[k] = v, where t is the value at the given index, v is the value at the top of the stack, and k is the value just below the top.
+This function pops both the key and the value from the stack. As in Lua, this function may trigger a metamethod for the "newindex" event
+*/
 LUA_API void lua_settable (lua_State *L, int idx) {
   StkId t;
   lua_lock(L);
