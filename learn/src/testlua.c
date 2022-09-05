@@ -371,8 +371,8 @@ float get_color_filed_simple(lua_State *L, const char *var)
 		error(L, "invalid component '%s' in color", var);
 
 	/*
-	Converts the Lua value at the given index to the C type lua_Number. 
-	The Lua value must be a number or a string convertible to a number; 
+	Converts the Lua value at the given index to the C type lua_Number.
+	The Lua value must be a number or a string convertible to a number;
 	otherwise, lua_tonumberx returns 0.
 	Equivalent to lua_tonumberx with isnum equal to NULL.
 	*/
@@ -533,4 +533,34 @@ void test_set_global_color_simple()
 		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
 
 	lua_close(L);
+}
+
+void test_cal_rect_area()
+{
+	lua_State *L = new_lua_state_with_win_cfg();
+
+	double w = 10, h = 20;
+
+	// 将需要的调用的lua函数压入stack
+	lua_getglobal(L, "CalRectArea");
+
+	// 将函数需要的参数width，height压入stack
+	lua_pushnumber(L, w);
+	lua_pushnumber(L, h);
+
+	// 执行函数调用，并将函数及其参数从stack中弹出，将计算结果压入stack
+	if ((lua_pcall(L, 2, 1, 0) != LUA_OK))
+		error(L, "error running function 'CalRectArea':%s", lua_tostring(L, -1));
+
+	int isnum;
+	double area = lua_tonumberx(L, -1, &isnum);						// 读取计算结果
+	if (!isnum)
+		error(L, "function 'CalRectArea' should return a number");
+	lua_pop(L, 1);													// 弹出计算结果
+
+	printf("area result:%f\n", area);
+
+	lua_close(L);
+
+	return;
 }

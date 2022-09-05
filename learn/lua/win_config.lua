@@ -13,3 +13,8 @@ for _, color_name in ipairs(color_names) do
 		print("name:", color_name, "red:", color.red, "green:", color.green, "blue:", color.blue)
 	end
 end
+
+function CalRectArea(rectW, rectH)
+	print("lua CalRectArea call", rectW, rectH)
+	return rectW * rectH
+end

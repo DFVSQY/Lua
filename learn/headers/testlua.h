@@ -53,3 +53,5 @@ void set_global_color_simple(lua_State *L, ColorTable *ct);
 void test_set_global_color();
 
 void test_set_global_color_simple();
+
+void test_cal_rect_area();

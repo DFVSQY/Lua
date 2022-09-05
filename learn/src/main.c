@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_set_global_color_simple();
+	test_cal_rect_area();
 
 	printf("run finish!\n");
 	return 0;
