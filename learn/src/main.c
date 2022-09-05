@@ -3,8 +3,7 @@
 
 int main()
 {
-	test_cal_rect_area();
-
+	test_call_func_common();
 	printf("run finish!\n");
 	return 0;
 }

@@ -548,7 +548,7 @@ void test_cal_rect_area()
 	lua_pushnumber(L, w);
 	lua_pushnumber(L, h);
 
-	/* 
+	/*
 	执行函数调用，并将函数及其参数从stack中弹出，将计算结果压入stack，
 	如果函数运行报错，lua_pcall依旧会将函数及其参数弹出stack，并将一个‘error message’压入stack，
 	在将message压入stack时，lua_pcall会调用第4个参数（0表示没有，其他表示在stack的位置）指定的‘message handler’(如果有的话)进行处理。
@@ -557,10 +557,124 @@ void test_cal_rect_area()
 		error(L, "error running function 'CalRectArea':%s", lua_tostring(L, -1));
 
 	int isnum;
-	double area = lua_tonumberx(L, -1, &isnum);						// 读取计算结果
+	double area = lua_tonumberx(L, -1, &isnum); // 读取计算结果
 	if (!isnum)
 		error(L, "function 'CalRectArea' should return a number");
-	lua_pop(L, 1);													// 弹出计算结果
+	lua_pop(L, 1); // 弹出计算结果
+
+	printf("area result:%f\n", area);
+
+	lua_close(L);
+
+	return;
+}
+
+/*
+调用lua函数的通用版本
+func: 待调用函数的名称
+sig：指明每个参数和返回值的类型
+...：传入的参数和接收返回值的指针变量
+*/
+void call_func_common(lua_State *L, const char *func, const char *sig, ...)
+{
+	int narg, nres; // 参数个数，返回值个数
+
+	va_list vl;
+	va_start(vl, sig);
+
+	/* 待调用函数入栈 */
+	lua_getglobal(L, func);
+
+	/* 参数入栈 */
+	for (narg = 0; *sig; narg++)
+	{
+		/*
+		Grows the stack size to top + sz elements, raising an error if the stack cannot grow to that size.
+		msg is an additional text to go into the error message (or NULL for no additional text).
+		*/
+		luaL_checkstack(L, 1, "too many args");
+
+		switch (*sig++)
+		{
+		case 'd':
+			lua_pushnumber(L, va_arg(vl, double));
+			break;
+
+		case 'i':
+			lua_pushnumber(L, va_arg(vl, int));
+			break;
+
+		case 's':
+			lua_pushstring(L, va_arg(vl, char *));
+			break;
+
+		case '>':
+			goto endargs;
+
+		default:
+			error(L, "invalid option (%c)", *(sig - 1));
+		}
+	}
+endargs:
+
+	/* 期望的返回结果个数*/
+	nres = strlen(sig);
+
+	if (lua_pcall(L, narg, nres, 0) != 0)
+		error(L, "error caling '%s':%s", func, lua_tostring(L, -1));
+
+	/* 接收返回值 */
+	nres = -nres; /* stack index of the first result */
+
+	while (*sig)
+	{
+		switch (*sig++)
+		{
+		case 'd':
+		{
+			int isnum;
+			double n = lua_tonumberx(L, nres, &isnum);
+			if (!isnum)
+				error(L, "wrong result type");
+			*va_arg(vl, double *) = n;
+			break;
+		}
+		case 'i':
+		{
+			int isnum;
+			int n = lua_tointegerx(L, nres, &isnum);
+			if (!isnum)
+				error(L, "wrong result type");
+			*va_arg(vl, int *) = n;
+			break;
+		}
+		case 's':
+		{
+			const char *s = lua_tostring(L, nres);
+			if (s == NULL)
+				error(L, "wrong result type");
+			*va_arg(vl, const char **) = s;
+			break;
+		}
+		default:
+			error(L, "invlid option (%c)", *(sig - 1));
+		}
+		nres++;
+	}
+
+	va_end(vl);
+}
+
+void test_call_func_common()
+{
+	lua_State *L = new_lua_state_with_win_cfg();
+
+	double w = 10, h = 20;
+	double area;
+
+	call_func_common(L, "CalRectArea", "dd>d", w, h, &area);
+
+	lua_pop(L, 1); // 弹出计算结果
 
 	printf("area result:%f\n", area);
 
