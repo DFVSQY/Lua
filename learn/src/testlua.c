@@ -548,7 +548,11 @@ void test_cal_rect_area()
 	lua_pushnumber(L, w);
 	lua_pushnumber(L, h);
 
-	// 执行函数调用，并将函数及其参数从stack中弹出，将计算结果压入stack
+	/* 
+	执行函数调用，并将函数及其参数从stack中弹出，将计算结果压入stack，
+	如果函数运行报错，lua_pcall依旧会将函数及其参数弹出stack，并将一个‘error message’压入stack，
+	在将message压入stack时，lua_pcall会调用第4个参数（0表示没有，其他表示在stack的位置）指定的‘message handler’(如果有的话)进行处理。
+	*/
 	if ((lua_pcall(L, 2, 1, 0) != LUA_OK))
 		error(L, "error running function 'CalRectArea':%s", lua_tostring(L, -1));
 
