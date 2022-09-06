@@ -23,3 +23,16 @@ if c_sin then
 	local result = c_sin(math.pi / 6)
 	print("sin30 = " .. result)
 end
+
+if c_get_dir_files then
+	print("=== beign files ===")
+	local files, err_msg = c_get_dir_files("./learn")
+	if not files then
+		print("open dir error:", err_msg)
+	else
+		for _, file in ipairs(files) do
+			print(file)
+		end
+	end
+	print("=== end files ===")
+end

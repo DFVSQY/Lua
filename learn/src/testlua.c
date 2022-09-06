@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <dirent.h>
+#include <errno.h>
 #include "testlua.h"
 
 /*
@@ -706,12 +708,45 @@ static void reg_l_sin(lua_State *L)
 	lua_setglobal(L, "c_sin");
 }
 
+static int get_dir_files(lua_State *L)
+{
+	DIR *dir;
+	const char *path = luaL_checkstring(L, 1); /* 读取目录 */
+	dir = opendir(path);					   /* 打开目录 */
+	if (dir == NULL)						   /* 打开目录错误 */
+	{
+		lua_pushnil(L);						/* return nil, ... */
+		lua_pushstring(L, strerror(errno)); /* push error message */
+		return 2;							/* number of results */
+	}
+
+	struct dirent *entry;
+	lua_newtable(L);
+	int i = 1;
+	while ((entry = readdir(dir)) != NULL) /* for each entry */
+	{
+		lua_pushinteger(L, i++);		  /* push key */
+		lua_pushstring(L, entry->d_name); /* push value */
+		lua_settable(L, -3);			  /* table[i] = entry name */
+	}
+
+	closedir(dir);
+	return 1; /* number of results */
+}
+
+static void reg_get_dir_files(lua_State *L)
+{
+	lua_pushcfunction(L, get_dir_files);
+	lua_setglobal(L, "c_get_dir_files");
+}
+
 void test_lua_call_c_func()
 {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
 	reg_l_sin(L);
+	reg_get_dir_files(L);
 
 	const char *fname = "learn\\lua\\win_config.lua";
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
