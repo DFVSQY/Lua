@@ -370,6 +370,11 @@ Equivalent to lua_tonumberx with isnum equal to NULL.
 
 #define lua_register(L,n,f) (lua_pushcfunction(L, (f)), lua_setglobal(L, (n)))
 
+/*
+Pushes a C function onto the stack. This function receives a pointer to a C function and pushes onto the stack a Lua value of type function that, 
+when called, invokes the corresponding C function.
+Any function to be callable by Lua must follow the correct protocol to receive its parameters and return its results
+*/
 #define lua_pushcfunction(L,f)	lua_pushcclosure(L, (f), 0)
 
 #define lua_isfunction(L,n)	(lua_type(L, (n)) == LUA_TFUNCTION)

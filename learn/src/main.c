@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_call_func_common();
+	test_lua_call_c_func();
 	printf("run finish!\n");
 	return 0;
 }

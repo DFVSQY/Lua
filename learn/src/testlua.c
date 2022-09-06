@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "testlua.h"
 
 /*
@@ -681,4 +682,40 @@ void test_call_func_common()
 	lua_close(L);
 
 	return;
+}
+
+static int l_sin(lua_State *L)
+{
+	double d = luaL_checknumber(L, 1); /* 从stack中获取参数 */
+	lua_pushnumber(L, sin(d));		   /* 将计算结果压入stack */
+	return 1;						   /* 返回结果个数 */
+}
+
+static void reg_l_sin(lua_State *L)
+{
+	/*
+	Pushes a C function onto the stack. This function receives a pointer to a C function and pushes onto the stack a Lua value of type function that,
+	when called, invokes the corresponding C function.
+	Any function to be callable by Lua must follow the correct protocol to receive its parameters and return its results
+	*/
+	lua_pushcfunction(L, l_sin);
+
+	/*
+	Pops a value from the stack and sets it as the new value of global name
+	*/
+	lua_setglobal(L, "c_sin");
+}
+
+void test_lua_call_c_func()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	reg_l_sin(L);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
+
+	lua_close(L);
 }

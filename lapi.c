@@ -356,6 +356,12 @@ LUA_API size_t lua_stringtonumber (lua_State *L, const char *s) {
 }
 
 
+/*
+Converts the Lua value at the given index to the C type lua_Number. 
+The Lua value must be a number or a string convertible to a number; otherwise, lua_tonumberx returns 0.
+
+If isnum is not NULL, its referent is assigned a boolean value that indicates whether the operation succeeded.
+*/
 LUA_API lua_Number lua_tonumberx (lua_State *L, int idx, int *pisnum) {
   lua_Number n;
   const TValue *o = index2addr(L, idx);

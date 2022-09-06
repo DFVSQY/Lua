@@ -18,3 +18,8 @@ function CalRectArea(rectW, rectH)
 	print("lua CalRectArea call", rectW, rectH)
 	return rectW * rectH
 end
+
+if c_sin then
+	local result = c_sin(math.pi / 6)
+	print("sin30 = " .. result)
+end

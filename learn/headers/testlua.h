@@ -59,3 +59,5 @@ void test_cal_rect_area();
 void call_func_common(lua_State *L, const char *func, const char *sig, ...);
 
 void test_call_func_common();
+
+void test_lua_call_c_func();
