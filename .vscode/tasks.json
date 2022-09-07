@@ -1,12 +1,12 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
-	"version": "2.0.0",
-	"tasks": [
-		{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
             "label": "构建",
             "type": "shell",
-            "command": "gcc",                           // 确保gcc放在环境变量中
+            "command": "gcc", // 确保gcc放在环境变量中
             "args": [
                 "-Wall",
                 "-std=c99",
@@ -68,6 +68,105 @@
                 "kind": "test",
                 "isDefault": true
             }
+        },
+        {
+            "label": "构建LuaDll", // 确保gcc放在环境变量中
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-fPIC",
+                "-shared",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\lapi.c",
+                "${workspaceFolder}\\lauxlib.c",
+                "${workspaceFolder}\\lbaselib.c",
+                "${workspaceFolder}\\lbitlib.c",
+                "${workspaceFolder}\\lcode.c",
+                "${workspaceFolder}\\lcorolib.c",
+                "${workspaceFolder}\\lctype.c",
+                "${workspaceFolder}\\ldblib.c",
+                "${workspaceFolder}\\ldebug.c",
+                "${workspaceFolder}\\ldo.c",
+                "${workspaceFolder}\\ldump.c",
+                "${workspaceFolder}\\lfunc.c",
+                "${workspaceFolder}\\lgc.c",
+                "${workspaceFolder}\\linit.c",
+                "${workspaceFolder}\\liolib.c",
+                "${workspaceFolder}\\llex.c",
+                "${workspaceFolder}\\lmathlib.c",
+                "${workspaceFolder}\\lmem.c",
+                "${workspaceFolder}\\loadlib.c",
+                "${workspaceFolder}\\lobject.c",
+                "${workspaceFolder}\\lopcodes.c",
+                "${workspaceFolder}\\loslib.c",
+                "${workspaceFolder}\\lparser.c",
+                "${workspaceFolder}\\lstate.c",
+                "${workspaceFolder}\\lstring.c",
+                "${workspaceFolder}\\lstrlib.c",
+                "${workspaceFolder}\\ltable.c",
+                "${workspaceFolder}\\ltablib.c",
+                "${workspaceFolder}\\ltests.c",
+                "${workspaceFolder}\\ltm.c",
+                "${workspaceFolder}\\lundump.c",
+                "${workspaceFolder}\\lutf8lib.c",
+                "${workspaceFolder}\\lvm.c",
+                "${workspaceFolder}\\lzio.c",
+                "-o",
+                "learn\\bin\\lua.dll"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "构建MyMathDLL", // 确保gcc放在环境变量中
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-fPIC",
+                "-shared",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\learn\\src\\mymath.c",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\mymathlib.dll"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "使用DLL构建Main",
+            "type": "shell",
+            "command": "gcc", // 确保gcc放在环境变量中
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\learn\\src\\main.c",
+                "${workspaceFolder}\\learn\\src\\testlua.c",
+                "${workspaceFolder}\\learn\\bin\\mymathlib.dll",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\main.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc"
         }
-	]
+    ]
 }

@@ -36,3 +36,19 @@ if c_get_dir_files then
 	end
 	print("=== end files ===")
 end
+
+-- 用于测试C Module注册的函数
+do
+	print("use_math_lib:", tostring(use_math_lib))
+	if use_math_lib then
+		local mymath = require "mymathlib"
+		if not mymath then
+			print("can't load mymathlib file")
+		else
+			local sum = mymath.add(3, 2)
+			print("sum:", sum)
+		local sub = mymath.sub(3, 2)
+		print("sub:", sub)
+		end
+	end
+end

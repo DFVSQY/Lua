@@ -742,12 +742,12 @@ static void reg_get_dir_files(lua_State *L)
 
 static void reg_get_dir_files_2(lua_State *L)
 {
-	/* 
+	/*
 	以下两句的缩写：
 	lua_pushcfunction(L, get_dir_files);
 	lua_setglobal(L, "c_get_dir_files");
 	*/
-	lua_register(L, "c_get_dir_files", get_dir_files);
+	lua_register(L, "c_get_dir_files_2", get_dir_files);
 }
 
 void test_lua_call_c_func()
@@ -756,11 +756,27 @@ void test_lua_call_c_func()
 	luaL_openlibs(L);
 
 	reg_l_sin(L);
+	reg_get_dir_files(L);
 	reg_get_dir_files_2(L);
 
 	const char *fname = "learn\\lua\\win_config.lua";
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
-		error(L, "cannot run config, file:%s", lua_tostring(L, -1));
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}
+
+void test_lua_call_c_module_func()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	lua_pushboolean(L, 1);
+	lua_setglobal(L, "use_math_lib");
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
 
 	lua_close(L);
 }
