@@ -740,13 +740,23 @@ static void reg_get_dir_files(lua_State *L)
 	lua_setglobal(L, "c_get_dir_files");
 }
 
+static void reg_get_dir_files_2(lua_State *L)
+{
+	/* 
+	以下两句的缩写：
+	lua_pushcfunction(L, get_dir_files);
+	lua_setglobal(L, "c_get_dir_files");
+	*/
+	lua_register(L, "c_get_dir_files", get_dir_files);
+}
+
 void test_lua_call_c_func()
 {
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
 	reg_l_sin(L);
-	reg_get_dir_files(L);
+	reg_get_dir_files_2(L);
 
 	const char *fname = "learn\\lua\\win_config.lua";
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
