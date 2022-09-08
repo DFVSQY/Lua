@@ -281,10 +281,33 @@ LUA_API void  (lua_setuservalue) (lua_State *L, int idx);
 */
 LUA_API void  (lua_callk) (lua_State *L, int nargs, int nresults,
                            lua_KContext ctx, lua_KFunction k);
+
+/*
+Calls a function.
+
+To call a function you must use the following protocol:
+first, the function to be called is pushed onto the stack;
+then, the arguments to the function are pushed in direct order;
+that is, the first argument is pushed first. Finally you call lua_call;
+
+n: 压入stack的参数个数
+r: 压入stack的返回值个数
+
+All arguments and the function value are popped from the stack when the function is called.
+The function results are pushed onto the stack when the function returns.
+The number of results is adjusted to nresults, unless nresults is LUA_MULTRET. 
+In this case, all results from the function are pushed; 
+Lua takes care that the returned values fit into the stack space, but it does not ensure any extra space in the stack.
+The function results are pushed onto the stack in direct order (the first result is pushed first), 
+so that after the call the last result is on the top of the stack.
+
+Any error inside the called function is propagated upwards (with a longjmp).
+*/
 #define lua_call(L,n,r)		lua_callk(L, (n), (r), 0, NULL)
 
 LUA_API int   (lua_pcallk) (lua_State *L, int nargs, int nresults, int errfunc,
                             lua_KContext ctx, lua_KFunction k);
+
 /*
 从stack中弹出被压入的函数并在保护模式下执行代码，无错则返回0，有错则将错误信息放入stack中
 */

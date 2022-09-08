@@ -63,3 +63,5 @@ void test_call_func_common();
 void test_lua_call_c_func();
 
 void test_lua_call_c_module_func();
+
+void test_operate_array();

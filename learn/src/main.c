@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_lua_call_c_module_func();
+	test_operate_array();
 	printf("run finish!\n");
 	return 0;
 }

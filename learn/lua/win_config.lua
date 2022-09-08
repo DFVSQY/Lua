@@ -39,7 +39,6 @@ end
 
 -- 用于测试C Module注册的函数
 do
-	print("use_math_lib:", tostring(use_math_lib))
 	if use_math_lib then
 		local mymath = require "mymathlib"
 		if not mymath then
@@ -51,4 +50,9 @@ do
 		print("sub:", sub)
 		end
 	end
+end
+
+array_t = {3, 5, 8, 10}
+each_array_e = function(value)
+	return value * value
 end

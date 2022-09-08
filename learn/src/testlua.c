@@ -780,3 +780,49 @@ void test_lua_call_c_module_func()
 
 	lua_close(L);
 }
+
+static void operate_array(lua_State *L)
+{
+	/* 确保第一个参数为table类型 */
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	/* 确保第二个参数为function类型 */
+	luaL_checktype(L, 2, LUA_TFUNCTION);
+
+	/* 返回table的数组长度 */
+	int n = luaL_len(L, 1);
+
+	for (int i = 1; i <= n; i++)
+	{
+		/* 将函数f压入stack */
+		lua_pushvalue(L, 2);
+
+		/* 将t[i]压入stack */
+		lua_geti(L, 1, i);
+
+		/* 调用函数: f(t[i]) */
+		lua_call(L, 1, 1);
+
+		/* t[i] = result */
+		lua_seti(L, 1, i);
+	}
+
+	for (int i = 1; i <= n; i++)
+	{
+		lua_geti(L, 1, i);
+		double num = luaL_checknumber(L, -1);
+		lua_pop(L, 1);
+		printf("%.0f\n", num);
+	}
+}
+
+void test_operate_array()
+{
+	lua_State *L = new_lua_state_with_win_cfg();
+
+	lua_getglobal(L, "array_t");
+	lua_getglobal(L, "each_array_e");
+	operate_array(L);
+
+	lua_close(L);
+};

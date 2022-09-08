@@ -663,6 +663,13 @@ LUA_API int lua_getfield (lua_State *L, int idx, const char *k) {
 }
 
 
+/*
+访问table中整数型key对应的value值，该方法会触发table中metamethod的执行，访问速度lua_rawgeti要慢。
+
+Pushes onto the stack the value t[n], where t is the value at the given index.
+As in Lua, this function may trigger a metamethod for the "index" event.
+Returns the type of the pushed value.
+*/
 LUA_API int lua_geti (lua_State *L, int idx, lua_Integer n) {
   StkId t;
   const TValue *slot;
@@ -693,6 +700,13 @@ LUA_API int lua_rawget (lua_State *L, int idx) {
 }
 
 
+/*
+访问table中整数型key对应的value值，该方法不会触发table中metamethod的执行，访问速度lua_geti要快。
+
+Pushes onto the stack the value t[n], where t is the table at the given index.
+The access is raw, that is, it does not invoke the __index metamethod.
+Returns the type of the pushed value.
+*/
 LUA_API int lua_rawgeti (lua_State *L, int idx, lua_Integer n) {
   StkId t;
   lua_lock(L);
@@ -825,6 +839,12 @@ LUA_API void lua_setfield (lua_State *L, int idx, const char *k) {
 }
 
 
+/*
+设置table中整数型key对应的value值，该方法会触发table中metamethod的执行，访问速度lua_rawseti要慢。
+
+Does the equivalent to t[n] = v, where t is the value at the given index and v is the value at the top of the stack.
+This function pops the value from the stack. As in Lua, this function may trigger a metamethod for the "newindex" event 
+*/
 LUA_API void lua_seti (lua_State *L, int idx, lua_Integer n) {
   StkId t;
   const TValue *slot;
@@ -859,6 +879,12 @@ LUA_API void lua_rawset (lua_State *L, int idx) {
 }
 
 
+/*
+设置table中整数型key对应的value值，该方法不会触发table中metamethod的执行，访问速度lua_seti要快。
+
+Does the equivalent of t[n] = v, where t is the table at the given index and v is the value at the top of the stack.
+This function pops the value from the stack. The assignment is raw, that is, it does not invoke the __newindex metamethod.
+*/
 LUA_API void lua_rawseti (lua_State *L, int idx, lua_Integer n) {
   StkId o;
   lua_lock(L);

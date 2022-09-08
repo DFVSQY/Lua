@@ -375,6 +375,9 @@ LUALIB_API void luaL_checkstack (lua_State *L, int space, const char *msg) {
 }
 
 
+/*
+Checks whether the function argument arg has type t
+*/
 LUALIB_API void luaL_checktype (lua_State *L, int arg, int t) {
   if (lua_type(L, arg) != t)
     tag_error(L, arg, t);
@@ -405,6 +408,7 @@ LUALIB_API const char *luaL_optlstring (lua_State *L, int arg,
 }
 
 
+/* Checks whether the function argument arg is a number and returns this number. */
 LUALIB_API lua_Number luaL_checknumber (lua_State *L, int arg) {
   int isnum;
   lua_Number d = lua_tonumberx(L, arg, &isnum);
@@ -795,6 +799,11 @@ LUALIB_API int luaL_callmeta (lua_State *L, int obj, const char *event) {
 }
 
 
+/*
+Returns the "length" of the value at the given index as a number;
+it is equivalent to the '#' operator in Lua.
+Raises an error if the result of the operation is not an integer. (This case only can happen through metamethods.)
+*/
 LUALIB_API lua_Integer luaL_len (lua_State *L, int idx) {
   lua_Integer l;
   int isnum;
