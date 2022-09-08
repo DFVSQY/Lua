@@ -162,10 +162,6 @@
                 "-o",
                 "learn\\bin\\main.exe"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
             "problemMatcher": "$gcc"
         }
     ]
