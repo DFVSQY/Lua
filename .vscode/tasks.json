@@ -123,9 +123,9 @@
             "problemMatcher": "$gcc"
         },
         {
-            "label": "构建MyMathDLL", // 确保gcc放在环境变量中
+            "label": "构建MyMathDLL",
             "type": "shell",
-            "command": "gcc",
+            "command": "gcc", // 确保gcc放在环境变量中
             "args": [
                 "-Wall",
                 "-std=c99",
