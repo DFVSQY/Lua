@@ -496,6 +496,12 @@ LUA_API void lua_pushinteger (lua_State *L, lua_Integer n) {
 
 
 /*
+Pushes the string pointed to by s with size len onto the stack.
+Lua makes (or reuses) an internal copy of the given string,
+so the memory at s can be freed or reused immediately after the function returns.
+The string can contain any binary data, including embedded zeros.
+Returns a pointer to the internal copy of the string.
+
 ** Pushes on the stack a string with given length. Avoid using 's' when
 ** 'len' == 0 (as 's' can be NULL in that case), due to later use of
 ** 'memcmp' and 'memcpy'.

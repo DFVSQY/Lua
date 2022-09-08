@@ -826,3 +826,51 @@ void test_operate_array()
 
 	lua_close(L);
 };
+
+static int split_string(lua_State *L)
+{
+	const char *s = luaL_checkstring(L, 1);	  /* 待分割字符串 */
+	const char *sep = luaL_checkstring(L, 2); /* 分割字符 */
+
+	lua_newtable(L); /* 新建一个table并压入stack */
+
+	int i = 1;
+	const char *e;
+	while ((e = strchr(s, *sep)) != NULL) /* e为遇见的第一个分隔符的指针 */
+	{
+		lua_pushlstring(L, s, e - s); /* 分割的子字符串压入stack */
+		lua_rawseti(L, -2, i++);	  /* t[i] = substr */
+		s = e + 1;
+	}
+
+	lua_pushstring(L, s);  /* 最后一个substring压入stack */
+	lua_rawseti(L, -2, i); /* t[i] = substr */
+
+	return 1;
+}
+
+void reg_split_string(lua_State *L)
+{
+	lua_pushcfunction(L, split_string);
+	lua_setglobal(L, "c_split_string");
+}
+
+void test_operate_string()
+{
+	/*
+	当C函数接收到来自Lua的一个字符串参数时，只需要遵守两条规则：
+	1. 不要将string从stack中弹出
+	2. 永远不要修改字符串内容
+	*/
+
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	reg_split_string(L);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}

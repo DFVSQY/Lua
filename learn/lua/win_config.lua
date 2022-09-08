@@ -56,3 +56,12 @@ array_t = {3, 5, 8, 10}
 each_array_e = function(value)
 	return value * value
 end
+
+if c_split_string then
+	local ss = c_split_string("file:edit:selection:view", ":")
+	print("===== beign c split string")
+	for index, value in ipairs(ss) do
+		print(index, value)
+	end
+	print("===== end c split string")
+end
