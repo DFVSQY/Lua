@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_operate_string();
+	test_tconcat();
 	printf("run finish!\n");
 	return 0;
 }

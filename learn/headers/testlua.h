@@ -69,3 +69,7 @@ void test_operate_array();
 void test_operate_string();
 
 void reg_split_string();
+
+void reg_tconcat(lua_State *L);
+
+void test_tconcat();

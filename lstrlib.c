@@ -109,11 +109,28 @@ static int str_lower (lua_State *L) {
 static int str_upper (lua_State *L) {
   size_t l;
   size_t i;
+
+  /* 使用辅助库buffer的第一步是先声明luaL_Buffer类型的变量 */
   luaL_Buffer b;
+
+  /*
+  检测stack底部第一个参数是否为字符串，如果成功返回指向字符串的指针，
+  第三个参数记录字符串长度
+  */
   const char *s = luaL_checklstring(L, 1, &l);
+
+  /* 
+  用给定的size初始化buffer，并返回一个指向buffer的指针，然后就可以使用该buffer创建所需的字符串，
+  buffer中保存了一个指向lua_State的引用
+  */
   char *p = luaL_buffinitsize(L, &b, l);
   for (i=0; i<l; i++)
     p[i] = toupper(uchar(s[i]));
+
+  /* 将buffer内容转换成一个Lua字符串并压入stack中，
+  第二个参数表示最终字符串的长度，通常和buffer长度相同，但也可以比buffer尺寸小，
+  因为buffer里有指向lua_State的引用，所以此处不需要传递lua_State指针作为参数
+  */
   luaL_pushresultsize(&b, l);
   return 1;
 }

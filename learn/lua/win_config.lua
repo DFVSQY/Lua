@@ -65,3 +65,9 @@ if c_split_string then
 	end
 	print("===== end c split string")
 end
+
+if c_tconcat then
+	local t = {"visual", "studio", "code"}
+	local s = c_tconcat(t)
+	print("c_tconcat result:" .. s)
+end

@@ -390,6 +390,13 @@ LUALIB_API void luaL_checkany (lua_State *L, int arg) {
 }
 
 
+/*
+Checks whether the function argument arg is a string and returns this string;
+if len is not NULL fills *len with the string's length.
+
+This function uses lua_tolstring to get its result,
+so all conversions and caveats of that function apply here.
+*/
 LUALIB_API const char *luaL_checklstring (lua_State *L, int arg, size_t *len) {
   const char *s = lua_tolstring(L, arg, len);
   if (!s) tag_error(L, arg, LUA_TSTRING);
@@ -543,6 +550,9 @@ LUALIB_API void luaL_addstring (luaL_Buffer *B, const char *s) {
 }
 
 
+/*
+Finishes the use of buffer B leaving the final string on the top of the stack.
+*/
 LUALIB_API void luaL_pushresult (luaL_Buffer *B) {
   lua_State *L = B->L;
   lua_pushlstring(L, B->b, B->n);
@@ -559,6 +569,11 @@ LUALIB_API void luaL_pushresultsize (luaL_Buffer *B, size_t sz) {
 }
 
 
+/*
+Adds the value at the top of the stack to the buffer B. Pops the value.
+This is the only function on string buffers that can (and must) be called with an extra element on the stack,
+which is the value to be added to the buffer.
+*/
 LUALIB_API void luaL_addvalue (luaL_Buffer *B) {
   lua_State *L = B->L;
   size_t l;
@@ -570,6 +585,9 @@ LUALIB_API void luaL_addvalue (luaL_Buffer *B) {
 }
 
 
+/*
+Initializes a buffer B. This function does not allocate any space; the buffer must be declared as a variable
+*/
 LUALIB_API void luaL_buffinit (lua_State *L, luaL_Buffer *B) {
   B->L = L;
   B->b = B->initb;

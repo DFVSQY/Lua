@@ -874,3 +874,52 @@ void test_operate_string()
 
 	lua_close(L);
 }
+
+static int tconcat(lua_State *L)
+{
+	/* 初始化一个用于存储字符串内容的Buffer */
+	luaL_Buffer b;
+
+	/* 检测第一个参数是否为table类 */
+	luaL_checktype(L, 1, LUA_TTABLE);
+
+	/* 获取table的数组长度 */
+	int n = luaL_len(L, 1);
+
+	/* 初始化buffer，但不分配任何空间，将指定的lua_State绑定到buffer上 */
+	luaL_buffinit(L, &b);
+
+	for (int i = 1; i <= n; i++)
+	{
+		/* 获取t[i]的值并压入stack */
+		lua_geti(L, 1, i);
+
+		/* 将stack顶部的值加入buffer，并弹出stack顶部值 */
+		luaL_addvalue(&b);
+	}
+
+	/* 完成buffer的使用，并将组合成的lua字符串压入stack */
+	luaL_pushresult(&b);
+
+	return 1;
+}
+
+void reg_tconcat(lua_State *L)
+{
+	lua_pushcfunction(L, tconcat);
+	lua_setglobal(L, "c_tconcat");
+}
+
+void test_tconcat()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	reg_tconcat(L);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}

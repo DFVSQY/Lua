@@ -546,6 +546,22 @@ LUA_API const char *lua_pushvfstring (lua_State *L, const char *fmt,
 }
 
 
+/*
+Pushes onto the stack a formatted string and returns a pointer to this string.
+It is similar to the ISO C function sprintf, but has some important differences:
+
+You do not have to allocate space for the result: 
+the result is a Lua string and Lua takes care of memory allocation (and deallocation, through garbage collection).
+The conversion specifiers are quite restricted. There are no flags, widths, or precisions. 
+The conversion specifiers can only be '%%' (inserts the character '%'), 
+'%s' (inserts a zero-terminated string, with no size restrictions), 
+'%f' (inserts a lua_Number), 
+'%I' (inserts a lua_Integer), 
+'%p' (inserts a pointer as a hexadecimal numeral), 
+'%d' (inserts an int), '%c' (inserts an int as a one-byte character),
+'%U' (inserts a long int as a UTF-8 byte sequence).
+Unlike other push functions, this function checks for the stack space it needs, including the slot for its result.
+*/
 LUA_API const char *lua_pushfstring (lua_State *L, const char *fmt, ...) {
   const char *ret;
   va_list argp;
@@ -1214,6 +1230,13 @@ LUA_API int lua_next (lua_State *L, int idx) {
 }
 
 
+/*
+以字符串方式连接stack最顶部的n个值，弹出n个值并将连接结果压入stack。
+
+Concatenates the n values at the top of the stack, pops them, and leaves the result at the top.
+If n is 1, the result is the single value on the stack (that is, the function does nothing);
+if n is 0, the result is the empty string. Concatenation is performed following the usual semantics of Lua
+*/
 LUA_API void lua_concat (lua_State *L, int n) {
   lua_lock(L);
   api_checknelems(L, n);
