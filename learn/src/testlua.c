@@ -923,3 +923,70 @@ void test_tconcat()
 
 	lua_close(L);
 }
+
+static void use_registry_store_lua_value_2_c(lua_State *L)
+{
+	/*
+	使用registry的一种方式是使用luaL_ref获取唯一整数key进行table存取,
+	示例如下:
+	*/
+
+	/* 弹出stack顶值，放入registry table中*/
+	int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+
+	/* 取出registry table中的指定的ref引用的值放入stack顶部 */
+	lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+
+	/* 释放registry中的ref占用 */
+	luaL_unref(L, LUA_REGISTRYINDEX, ref);
+
+	/*
+	使用registry的一种方式是使用static变量的地址（c链接器会确保该地址唯一）作为key进行table存取,
+	示例如下:
+	*/
+
+	static char key = 'k';
+
+	/* 存字符串到registry */
+	lua_pushlightuserdata(L, (void *)&key); /* push address key */
+	lua_pushstring(L, "hello world");		/* push value */
+	lua_settable(L, LUA_REGISTRYINDEX);		/* registry[key] = "hello world" */
+
+	/* 取字符串从registry */
+	lua_pushlightuserdata(L, (void *)&key); /* push address key */
+	lua_gettable(L, LUA_REGISTRYINDEX);		/* get value  */
+	const char *str = lua_tostring(L, -1);	/* convert to string */
+}
+
+/* use_registry_store_lua_value_2_c 的简化版 */
+static void use_registry_store_lua_value_2_c_simple(lua_State *L)
+{
+	/*
+	使用registry的一种方式是使用luaL_ref获取唯一整数key进行table存取,
+	示例如下:
+	*/
+
+	/* 弹出stack顶值，放入registry table中*/
+	int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+
+	/* 取出registry table中的指定的ref引用的值放入stack顶部 */
+	lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+
+	/* 释放registry中的ref占用 */
+	luaL_unref(L, LUA_REGISTRYINDEX, ref);
+
+	/*
+	使用registry的一种方式是使用static变量的地址（c链接器会确保该地址唯一）作为key进行table存取,
+	示例如下:
+	*/
+
+	static char key = 'k';
+
+	/* 存字符串到registry */
+	lua_pushstring(L, "hello world");				 /* push value */
+	lua_rawsetp(L, LUA_REGISTRYINDEX, (void *)&key); /* registry[key] = "hello world" */
+
+	/* 取字符串从registry */
+	lua_rawgetp(L, LUA_REGISTRYINDEX, (void *)&key);
+	const char *str = lua_tostring(L, -1); /* convert to string */
+}

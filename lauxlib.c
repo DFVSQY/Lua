@@ -614,6 +614,17 @@ LUALIB_API char *luaL_buffinitsize (lua_State *L, luaL_Buffer *B, size_t sz) {
 #define freelist	0
 
 
+/*
+Creates and returns a reference, in the table at index t, for the object at the top of the stack (and pops the object).
+
+A reference is a unique integer key. As long as you do not manually add integer keys into table t,
+luaL_ref ensures the uniqueness of the key it returns.
+You can retrieve an object referred by reference r by calling lua_rawgeti(L, t, r). 
+Function luaL_unref frees a reference and its associated object.
+
+If the object at the top of the stack is nil, luaL_ref returns the constant LUA_REFNIL.
+The constant LUA_NOREF is guaranteed to be different from any reference returned by luaL_ref.
+*/
 LUALIB_API int luaL_ref (lua_State *L, int t) {
   int ref;
   if (lua_isnil(L, -1)) {
@@ -635,6 +646,13 @@ LUALIB_API int luaL_ref (lua_State *L, int t) {
 }
 
 
+/*
+Releases reference ref from the table at index t (see luaL_ref). 
+The entry is removed from the table, so that the referred object can be collected.
+The reference ref is also freed to be used again.
+
+If ref is LUA_NOREF or LUA_REFNIL, luaL_unref does nothing.
+*/
 LUALIB_API void luaL_unref (lua_State *L, int t, int ref) {
   if (ref >= 0) {
     t = lua_absindex(L, t);
