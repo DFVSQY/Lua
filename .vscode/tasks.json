@@ -144,7 +144,28 @@
             "problemMatcher": "$gcc"
         },
         {
-            "label": "使用DLL构建Main",
+            "label": "构建MyTupleDLL",
+            "type": "shell",
+            "command": "gcc", // 确保gcc放在环境变量中
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-fPIC",
+                "-shared",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\learn\\src\\mytuple.c",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\mytuplelib.dll"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "构建Main(mymathlib.dll)",
             "type": "shell",
             "command": "gcc", // 确保gcc放在环境变量中
             "args": [
@@ -158,6 +179,27 @@
                 "${workspaceFolder}\\learn\\src\\main.c",
                 "${workspaceFolder}\\learn\\src\\testlua.c",
                 "${workspaceFolder}\\learn\\bin\\mymathlib.dll",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\main.exe"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "构建Main(mytuplelib.dll)",
+            "type": "shell",
+            "command": "gcc", // 确保gcc放在环境变量中
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\learn\\src\\main.c",
+                "${workspaceFolder}\\learn\\src\\testlua.c",
+                "${workspaceFolder}\\learn\\bin\\mytuplelib.dll",
                 "${workspaceFolder}\\learn\\bin\\lua.dll",
                 "-o",
                 "learn\\bin\\main.exe"

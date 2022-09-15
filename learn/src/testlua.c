@@ -1053,3 +1053,18 @@ void test_c_closure()
 
 	lua_close(L);
 };
+
+void test_c_closure_tuple()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	lua_pushboolean(L, 1);
+	lua_setglobal(L, "use_tuple_lib");
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}

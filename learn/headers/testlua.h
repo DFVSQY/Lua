@@ -77,3 +77,5 @@ void test_tconcat();
 void test_use_registry();
 
 void test_c_closure();
+
+void test_c_closure_tuple();

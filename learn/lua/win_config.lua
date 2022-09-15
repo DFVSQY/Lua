@@ -79,3 +79,21 @@ if _G.c_counter then
 	local c2 = _G.c_counter()
 	print("c2:", c2(), c2(), c2())
 end
+
+if _G.use_tuple_lib then
+	local c_tuple = require "mytuplelib"
+	local x = c_tuple.new(10, "hi", {}, 3)
+
+	--[[ 带参数的获取指定的key对应的值 ]]
+	print(x(1))			--> 10
+	print(x(2))			--> hi
+	print(x(3))			--> table: 000001e0fec64f10
+	print(x(4))			--> 3
+
+	--[[
+		不带参数的获取全部的值，具体的代码实现上对于0也获取全部值
+		(具体参考mytuple.c中的t_tuple函数实现)
+	]]
+	print(x())			--> 10 hi table: 000001e0fec64f10 3
+	print(x(0))			--> 10 hi table: 000001e0fec64f10 3
+end

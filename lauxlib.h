@@ -123,6 +123,11 @@ LUALIB_API void (luaL_requiref) (lua_State *L, const char *modname,
 #define luaL_newlib(L,l)  \
   (luaL_checkversion(L), luaL_newlibtable(L,l), luaL_setfuncs(L,l,0))
 
+/*
+Checks whether cond is true. If it is not, raises an error with a standard message
+Raises an error reporting a problem with argument arg of the C function that called it, 
+using a standard message that includes extramsg as a comment.
+*/
 #define luaL_argcheck(L, cond,arg,extramsg)	\
 		((void)((cond) || luaL_argerror(L, (arg), (extramsg))))
 #define luaL_checkstring(L,n)	(luaL_checklstring(L, (n), NULL))

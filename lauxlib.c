@@ -448,6 +448,10 @@ LUALIB_API lua_Integer luaL_checkinteger (lua_State *L, int arg) {
 }
 
 
+/*
+If the function argument arg is an integer (or convertible to an integer), returns this integer. 
+If this argument is absent or is nil, returns def. Otherwise, raises an error.
+*/
 LUALIB_API lua_Integer luaL_optinteger (lua_State *L, int arg,
                                                       lua_Integer def) {
   return luaL_opt(L, luaL_checkinteger, arg, def);
