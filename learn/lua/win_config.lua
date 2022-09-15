@@ -2,9 +2,9 @@
 	用于记录一些窗口配置
 ]]
 
-width, height = 50, 30
+_G.width, _G.height = 50, 30
 
-background = {r = 0.3, g = 0.5, b = 0.2}
+_G.background = {r = 0.3, g = 0.5, b = 0.2}
 
 local color_names = {"WHITE", "RED", "GREEN", "BLUE"}
 for _, color_name in ipairs(color_names) do
@@ -14,19 +14,19 @@ for _, color_name in ipairs(color_names) do
 	end
 end
 
-function CalRectArea(rectW, rectH)
+function _G.CalRectArea(rectW, rectH)
 	print("lua CalRectArea call", rectW, rectH)
 	return rectW * rectH
 end
 
-if c_sin then
-	local result = c_sin(math.pi / 6)
+if _G.c_sin then
+	local result = _G.c_sin(math.pi / 6)
 	print("sin30 = " .. result)
 end
 
-if c_get_dir_files then
+if _G.c_get_dir_files then
 	print("=== beign files ===")
-	local files, err_msg = c_get_dir_files("./learn")
+	local files, err_msg = _G.c_get_dir_files("./learn")
 	if not files then
 		print("open dir error:", err_msg)
 	else
@@ -39,7 +39,7 @@ end
 
 -- 用于测试C Module注册的函数
 do
-	if use_math_lib then
+	if _G.use_math_lib then
 		local mymath = require "mymathlib"
 		if not mymath then
 			print("can't load mymathlib file")
@@ -52,13 +52,13 @@ do
 	end
 end
 
-array_t = {3, 5, 8, 10}
-each_array_e = function(value)
+_G.array_t = {3, 5, 8, 10}
+_G.each_array_e = function(value)
 	return value * value
 end
 
-if c_split_string then
-	local ss = c_split_string("file:edit:selection:view", ":")
+if _G.c_split_string then
+	local ss = _G.c_split_string("file:edit:selection:view", ":")
 	print("===== beign c split string")
 	for index, value in ipairs(ss) do
 		print(index, value)
@@ -66,16 +66,16 @@ if c_split_string then
 	print("===== end c split string")
 end
 
-if c_tconcat then
+if _G.c_tconcat then
 	local t = {"visual", "studio", "code"}
-	local s = c_tconcat(t)
+	local s = _G.c_tconcat(t)
 	print("c_tconcat result:" .. s)
 end
 
-if c_counter then
-	local c1 = c_counter()
+if _G.c_counter then
+	local c1 = _G.c_counter()
 	print("c1:", c1(), c1(), c1())
 
-	local c2 = c_counter()
+	local c2 = _G.c_counter()
 	print("c2:", c2(), c2(), c2())
 end
