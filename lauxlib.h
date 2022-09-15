@@ -117,9 +117,18 @@ LUALIB_API void (luaL_requiref) (lua_State *L, const char *modname,
 */
 
 
+/*
+Creates a new table with a size optimized to store all entries in the array l (but does not actually store them). 
+It is intended to be used in conjunction with luaL_setfuncs (see luaL_newlib).
+
+It is implemented as a macro. The array l must be the actual array, not a pointer to it.
+*/
 #define luaL_newlibtable(L,l)	\
   lua_createtable(L, 0, sizeof(l)/sizeof((l)[0]) - 1)
 
+/*
+Creates a new table and registers there the functions in list l.
+*/
 #define luaL_newlib(L,l)  \
   (luaL_checkversion(L), luaL_newlibtable(L,l), luaL_setfuncs(L,l,0))
 

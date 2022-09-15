@@ -979,6 +979,11 @@ LUALIB_API void luaL_openlib (lua_State *L, const char *libname,
 ** set functions from list 'l' into table at top - 'nup'; each
 ** function gets the 'nup' elements at the top as upvalues.
 ** Returns with only the table at the stack.
+
+Registers all functions in the array l (see luaL_Reg) into the table on the top of the stack (below optional upvalues, see next).
+When nup is not zero, all functions are created sharing nup upvalues, 
+which must be previously pushed on the stack on top of the library table. 
+These values are popped from the stack after the registration.
 */
 LUALIB_API void luaL_setfuncs (lua_State *L, const luaL_Reg *l, int nup) {
   luaL_checkstack(L, nup, "too many upvalues");

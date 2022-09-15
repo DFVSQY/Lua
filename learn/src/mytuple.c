@@ -59,7 +59,7 @@ static int t_new(lua_State *L)
 	int top = lua_gettop(L);
 
 	/*
-	first checks that the number of fields respects the limit for upvalues in a closure 
+	first checks that the number of fields respects the limit for upvalues in a closure
 	*/
 	luaL_argcheck(L, top < 256, top, "too many fileds");
 
@@ -84,5 +84,18 @@ static const struct luaL_Reg tuple_lib[] = {
 int luaopen_mytuplelib(lua_State *L)
 {
 	luaL_newlib(L, tuple_lib);
+
+	/*
+	共享upvalue的版本:
+	// create library table ('lib' is its list of functions)
+	luaL_newlibtable(L, tuple_lib);
+
+	// create shared upvalue
+	lua_newtable(L);
+
+	// add functions in list 'lib' to the new library, sharing previous table as upvalue
+	luaL_setfuncs(L, tuple_lib, 1);
+	*/
+
 	return 1;
 }
