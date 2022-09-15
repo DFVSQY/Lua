@@ -73,3 +73,5 @@ void reg_split_string();
 void reg_tconcat(lua_State *L);
 
 void test_tconcat();
+
+void test_use_registry();

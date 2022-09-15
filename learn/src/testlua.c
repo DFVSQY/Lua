@@ -989,4 +989,14 @@ static void use_registry_store_lua_value_2_c_simple(lua_State *L)
 	/* 取字符串从registry */
 	lua_rawgetp(L, LUA_REGISTRYINDEX, (void *)&key);
 	const char *str = lua_tostring(L, -1); /* convert to string */
+	printf(str);
+}
+
+void test_use_registry()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+	use_registry_store_lua_value_2_c(L);
+	use_registry_store_lua_value_2_c_simple(L);
+	lua_close(L);
 }
