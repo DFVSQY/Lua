@@ -71,3 +71,11 @@ if c_tconcat then
 	local s = c_tconcat(t)
 	print("c_tconcat result:" .. s)
 end
+
+if c_counter then
+	local c1 = c_counter()
+	print("c1:", c1(), c1(), c1())
+
+	local c2 = c_counter()
+	print("c2:", c2(), c2(), c2())
+end

@@ -75,3 +75,5 @@ void reg_tconcat(lua_State *L);
 void test_tconcat();
 
 void test_use_registry();
+
+void test_c_closure();

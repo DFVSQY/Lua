@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_tconcat();
+	test_c_closure();
 	printf("run finish!\n");
 	return 0;
 }

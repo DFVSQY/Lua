@@ -575,6 +575,22 @@ LUA_API const char *lua_pushfstring (lua_State *L, const char *fmt, ...) {
 }
 
 
+/*
+Pushes a new C closure onto the stack.
+
+When a C function is created, it is possible to associate some values with it, thus creating a C closure;
+these values are then accessible to the function whenever it is called. 
+To associate values with a C function, first these values must be pushed onto the stack 
+(when there are multiple values, the first value is pushed first). 
+Then lua_pushcclosure is called to create and push the C function onto the stack, 
+with the argument n telling how many values will be associated with the function. 
+lua_pushcclosure also pops these values from the stack.
+
+The maximum value for n is 255.
+
+When n is zero, this function creates a light C function,
+which is just a pointer to the C function. In that case, it never raises a memory error.
+*/
 LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
   lua_lock(L);
   if (n == 0) {

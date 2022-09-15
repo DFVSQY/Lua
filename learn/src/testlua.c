@@ -956,6 +956,7 @@ static void use_registry_store_lua_value_2_c(lua_State *L)
 	lua_pushlightuserdata(L, (void *)&key); /* push address key */
 	lua_gettable(L, LUA_REGISTRYINDEX);		/* get value  */
 	const char *str = lua_tostring(L, -1);	/* convert to string */
+	printf(str);
 }
 
 /* use_registry_store_lua_value_2_c 的简化版 */
@@ -1000,3 +1001,55 @@ void test_use_registry()
 	use_registry_store_lua_value_2_c_simple(L);
 	lua_close(L);
 }
+
+static int counter(lua_State *L)
+{
+	/*
+	lua_upvalueindex, which produces the pseudo-index of an upvalue.
+	In particular, the expression lua_upvalueindex(1) gives the pseudo-index of the first upvalue of the running function.
+	Again, this pseudo-index is like any stack index, except that it does not live on the stack
+	*/
+	int idx = lua_upvalueindex(1);
+
+	/* lua_tointeger retrieves the first upvalue */
+	int val = lua_tointeger(L, idx);
+
+	/* use the upvalue and put the result to stack */
+	lua_pushinteger(L, ++val);
+
+	/* adjust upvalue's value, here copy the result to the upvalue's value */
+	lua_copy(L, -1, idx);
+	return 1;
+};
+
+static int new_counter(lua_State *L)
+{
+	/* push upvalue(here is 0) to stack */
+	lua_pushinteger(L, 0);
+
+	/*
+	create a closure
+	second arg: the base function
+	third arg: the number of upvalues
+
+	Before creating a new closure, we must push on the stack the initial values for its upvalues.
+	lua_pushcclosure leaves the new closure on the stack,
+	so the closure is ready to be returned as the result of new_counter
+	*/
+	lua_pushcclosure(L, &counter, 1);
+	return 1;
+}
+
+void test_c_closure()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	lua_register(L, "c_counter", new_counter);
+
+	const char *fname = "learn\\lua\\win_config.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+};
