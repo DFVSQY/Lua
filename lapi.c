@@ -1302,6 +1302,15 @@ LUA_API void lua_setallocf (lua_State *L, lua_Alloc f, void *ud) {
 }
 
 
+/*
+Lua provides a basic type specifically for representing a C structure in Lua, called userdata. 
+A userdata offers a raw memory area, with no predefined operations in Lua, 
+which we can use to store anything.
+
+This function allocates a new block of memory with the given size, 
+pushes onto the stack a new full userdata with the block address, and returns this address. 
+The host program can freely use this memory.
+*/
 LUA_API void *lua_newuserdata (lua_State *L, size_t size) {
   Udata *u;
   lua_lock(L);

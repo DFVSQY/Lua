@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_c_closure_tuple();
+	test_c_array();
 	printf("run finish!\n");
 	return 0;
 }

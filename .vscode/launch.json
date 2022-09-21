@@ -28,7 +28,6 @@
 					"ignoreFailures": true
 				}
 			],
-			"preLaunchTask": "构建"
 		}
 	]
 }
