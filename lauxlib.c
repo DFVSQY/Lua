@@ -296,6 +296,19 @@ LUALIB_API int luaL_execresult (lua_State *L, int stat) {
 ** =======================================================
 */
 
+/*
+create a new table (to be used as a metatable), 
+leaves the new table on the top of the stack, 
+and maps the table to the given name in the registry
+
+If the registry already has the key tname, returns 0. 
+Otherwise, creates a new table to be used as a metatable for userdata, 
+adds to this new table the pair __name = tname, 
+adds to the registry the pair [tname] = new table, and returns 1. 
+(The entry __name is used by some error-reporting functions.)
+
+In both cases pushes onto the stack the final value associated with tname in the registry.
+*/
 LUALIB_API int luaL_newmetatable (lua_State *L, const char *tname) {
   if (luaL_getmetatable(L, tname) != LUA_TNIL)  /* name already in use? */
     return 0;  /* leave previous value on top, but return 0 */
@@ -330,6 +343,14 @@ LUALIB_API void *luaL_testudata (lua_State *L, int ud, const char *tname) {
 }
 
 
+/*
+checks whether the object at the given stack position is a userdata with a metatable that matches the given name. 
+It raises an error if the object is not a userdata or if it does not have the correct metatable; 
+otherwise, it returns the userdata address
+
+Checks whether the function argument ud is a userdata of the type tname (see luaL_newmetatable)
+and returns the userdata address (see lua_touserdata).
+*/
 LUALIB_API void *luaL_checkudata (lua_State *L, int ud, const char *tname) {
   void *p = luaL_testudata(L, ud, tname);
   if (p == NULL) typeerror(L, ud, tname);
@@ -438,6 +459,10 @@ static void interror (lua_State *L, int arg) {
 }
 
 
+/*
+Checks whether the function argument arg is an integer (or can be converted to an integer) 
+and returns this integer cast to a lua_Integer.
+*/
 LUALIB_API lua_Integer luaL_checkinteger (lua_State *L, int arg) {
   int isnum;
   lua_Integer d = lua_tointegerx(L, arg, &isnum);

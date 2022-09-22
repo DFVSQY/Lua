@@ -150,6 +150,13 @@ using a standard message that includes extramsg as a comment.
 #define luaL_dostring(L, s) \
 	(luaL_loadstring(L, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
 
+/*
+retrieve the metatable associated with tname from the registry.
+
+Pushes onto the stack the metatable associated with name tname in the registry (see luaL_newmetatable) 
+(nil if there is no metatable associated with that name). 
+Returns the type of the pushed value.
+*/
 #define luaL_getmetatable(L,n)	(lua_getfield(L, LUA_REGISTRYINDEX, (n)))
 
 #define luaL_opt(L,f,n,d)	(lua_isnoneornil(L,(n)) ? (d) : f(L,(n)))

@@ -952,6 +952,7 @@ LUA_API void lua_rawsetp (lua_State *L, int idx, const void *p) {
 }
 
 
+/* Pops a table from the stack and sets it as the new metatable for the value at the given index. */
 LUA_API int lua_setmetatable (lua_State *L, int objindex) {
   TValue *obj;
   Table *mt;
