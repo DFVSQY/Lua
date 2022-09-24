@@ -434,6 +434,12 @@ LUA_API lua_CFunction lua_tocfunction (lua_State *L, int idx) {
 }
 
 
+/*
+If the value at the given index is a full userdata,
+returns its block address. 
+If the value is a light userdata, returns its pointer. 
+Otherwise, returns NULL.
+*/
 LUA_API void *lua_touserdata (lua_State *L, int idx) {
   StkId o = index2addr(L, idx);
   switch (ttnov(o)) {

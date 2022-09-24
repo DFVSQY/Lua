@@ -39,6 +39,8 @@
 ** space after that to help overflow detection)
 */
 #define LUA_REGISTRYINDEX	(-LUAI_MAXSTACK - 1000)
+
+/* Returns the pseudo-index that represents the i-th upvalue of the running function */
 #define lua_upvalueindex(i)	(LUA_REGISTRYINDEX - (i))
 
 

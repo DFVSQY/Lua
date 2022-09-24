@@ -81,3 +81,5 @@ void test_c_closure();
 void test_c_closure_tuple();
 
 void test_c_array();
+
+void test_c_dir();
