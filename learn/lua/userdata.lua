@@ -22,3 +22,14 @@ if _G.use_c_array_meta then
 	]]
 	array_meta.size(io.stdin)
 end
+
+if _G.use_c_array_obj then
+	local arrayobj = require "arrayobj"
+	local a = arrayobj.new(1000)
+	for i = 1, 1000 do
+		a:set(i, i % 2 == 0) -- a[i] == (i % 2) == 0
+	end
+	print(a:get(10)) -- true
+	print(a:get(11)) -- false
+	print(a:size())	-- 1000
+end

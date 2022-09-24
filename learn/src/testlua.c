@@ -1077,8 +1077,11 @@ void test_c_array()
 	lua_pushboolean(L, 0);
 	lua_setglobal(L, "use_c_array");
 
-	lua_pushboolean(L, 1);
+	lua_pushboolean(L, 0);
 	lua_setglobal(L, "use_c_array_meta");
+
+	lua_pushboolean(L, 1);
+	lua_setglobal(L, "use_c_array_obj");
 
 	const char *fname = "learn\\lua\\userdata.lua";
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))

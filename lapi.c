@@ -771,6 +771,14 @@ LUA_API int lua_rawgetp (lua_State *L, int idx, const void *p) {
 }
 
 
+/*
+Creates a new empty table and pushes it onto the stack. 
+Parameter narray is a hint for how many elements the table will have as a sequence; 
+parameter nrec is a hint for how many other elements the table will have. 
+Lua may use these hints to preallocate memory for the new table. 
+This preallocation is useful for performance when you know in advance how many elements the table will have. 
+Otherwise you can use the function lua_newtable.
+*/
 LUA_API void lua_createtable (lua_State *L, int narray, int nrec) {
   Table *t;
   lua_lock(L);
@@ -871,6 +879,13 @@ LUA_API void lua_settable (lua_State *L, int idx) {
 }
 
 
+/*
+Does the equivalent to t[k] = v, 
+where t is the value at the given index and v is the value at the top of the stack.
+
+This function pops the value from the stack. 
+As in Lua, this function may trigger a metamethod for the "newindex" event
+*/
 LUA_API void lua_setfield (lua_State *L, int idx, const char *k) {
   lua_lock(L);  /* unlock done in 'auxsetstr' */
   auxsetstr(L, index2addr(L, idx), k);
