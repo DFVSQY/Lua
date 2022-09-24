@@ -141,9 +141,9 @@ static const struct luaL_Reg array_lib_f[] = {
 
 static const struct luaL_Reg array_lib_m[] = {
 	{"__tostring", array_2_string},
-	{"set", set_array},
-	{"get", get_array},
-	{"size", get_size},
+	{"__newindex", set_array},
+	{"__index", get_array},
+	{"__len", get_size},
 	{NULL, NULL},
 };
 
@@ -151,12 +151,6 @@ int luaopen_arrayobj(lua_State *L)
 {
 	/* create metatable */
 	luaL_newmetatable(L, "LuaBook.array");
-
-	/* duplicate the metatable */
-	lua_pushvalue(L, -1);
-
-	/* mt.__index = mt */
-	lua_setfield(L, -2, "__index");
 
 	/* register metamethods */
 	luaL_setfuncs(L, array_lib_m, 0);
