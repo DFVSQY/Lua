@@ -698,7 +698,8 @@ LUA_API int lua_gettable (lua_State *L, int idx) {
 
 
 /*
-Pushes onto the stack the value t[k], where t is the value at the given index. As in Lua, this function may trigger a metamethod for the "index" event.
+Pushes onto the stack the value t[k], where t is the value at the given index. 
+As in Lua, this function may trigger a metamethod for the "index" event.
 Returns the type of the pushed value.
 */
 LUA_API int lua_getfield (lua_State *L, int idx, const char *k) {
@@ -1014,6 +1015,7 @@ LUA_API int lua_setmetatable (lua_State *L, int objindex) {
 }
 
 
+/* Pops a value from the stack and sets it as the new value associated to the full userdata at the given index. */
 LUA_API void lua_setuservalue (lua_State *L, int idx) {
   StkId o;
   lua_lock(L);

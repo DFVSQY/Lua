@@ -249,6 +249,34 @@
             "problemMatcher": "$gcc"
         },
         {
+            "label": "构建LxpDLL",
+            "type": "shell",
+            "command": "gcc", // 确保gcc放在环境变量中
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-fPIC",
+                "-shared",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "-I",
+                "learn\\headers\\expat",
+                "${workspaceFolder}\\learn\\src\\lxp.c",
+                "${workspaceFolder}\\learn\\src\\expat\\xmlparse.c",
+                "${workspaceFolder}\\learn\\src\\expat\\xmlrole.c",
+                "${workspaceFolder}\\learn\\src\\expat\\xmltok_impl.c",
+                "${workspaceFolder}\\learn\\src\\expat\\xmltok_ns.c",
+                "${workspaceFolder}\\learn\\src\\expat\\xmltok.c",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\lxp.dll"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
             "label": "构建Main(mymathlib.dll)",
             "type": "shell",
             "command": "gcc", // 确保gcc放在环境变量中
@@ -368,6 +396,27 @@
                 "${workspaceFolder}\\learn\\src\\main.c",
                 "${workspaceFolder}\\learn\\src\\testlua.c",
                 "${workspaceFolder}\\learn\\bin\\dir.dll",
+                "${workspaceFolder}\\learn\\bin\\lua.dll",
+                "-o",
+                "learn\\bin\\main.exe"
+            ],
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "构建Main(Lxp.dll)",
+            "type": "shell",
+            "command": "gcc", // 确保gcc放在环境变量中
+            "args": [
+                "-Wall",
+                "-std=c99",
+                "-g",
+                "-I",
+                "${workspaceFolder}",
+                "-I",
+                "learn\\headers",
+                "${workspaceFolder}\\learn\\src\\main.c",
+                "${workspaceFolder}\\learn\\src\\testlua.c",
+                "${workspaceFolder}\\learn\\bin\\lxp.dll",
                 "${workspaceFolder}\\learn\\bin\\lua.dll",
                 "-o",
                 "learn\\bin\\main.exe"

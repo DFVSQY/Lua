@@ -425,6 +425,15 @@ LUALIB_API const char *luaL_checklstring (lua_State *L, int arg, size_t *len) {
 }
 
 
+/*
+If the function argument arg is a string, returns this string. 
+If this argument is absent or is nil, returns def. Otherwise, raises an error.
+
+If len is not NULL, fills the position *len with the result's length. 
+If the result is NULL (only possible when returning d and d == NULL), its length is considered zero.
+
+This function uses lua_tolstring to get its result, so all conversions and caveats of that function apply here.
+*/
 LUALIB_API const char *luaL_optlstring (lua_State *L, int arg,
                                         const char *def, size_t *len) {
   if (lua_isnoneornil(L, arg)) {

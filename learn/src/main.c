@@ -3,7 +3,7 @@
 
 int main()
 {
-	test_c_dir();
+	test_c_xml();
 	printf("run finish!\n");
 	return 0;
 }

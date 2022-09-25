@@ -1104,3 +1104,18 @@ void test_c_dir()
 
 	lua_close(L);
 }
+
+void test_c_xml()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	lua_pushboolean(L, 1);
+	lua_setglobal(L, "use_c_xml_parser");
+
+	const char *fname = "learn\\lua\\manager_res.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	lua_close(L);
+}
