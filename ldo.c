@@ -645,6 +645,24 @@ static void resume (lua_State *L, void *ud) {
 }
 
 
+/*
+Starts and resumes a coroutine in the given thread L.
+
+To start a coroutine, you push onto the thread stack the main function plus any arguments; 
+then you call lua_resume, with nargs being the number of arguments. 
+This call returns when the coroutine suspends or finishes its execution. 
+When it returns, the stack contains all values passed to lua_yield, or all values returned by the body function. 
+lua_resume returns LUA_YIELD if the coroutine yields, 
+LUA_OK if the coroutine finishes its execution without errors, or an error code in case of errors (see lua_pcall).
+
+In case of errors, the stack is not unwound, so you can use the debug API over it. The error object is on the top of the stack.
+
+To resume a coroutine, you remove any results from the last lua_yield, 
+put on its stack only the values to be passed as results from yield, and then call lua_resume.
+
+The parameter from represents the coroutine that is resuming L. 
+If there is no such coroutine, this parameter can be NULL.
+*/
 LUA_API int lua_resume (lua_State *L, lua_State *from, int nargs) {
   int status;
   unsigned short oldnny = L->nny;  /* save "number of non-yieldable" calls */
