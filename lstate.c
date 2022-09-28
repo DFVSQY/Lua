@@ -252,6 +252,12 @@ static void close_state (lua_State *L) {
 }
 
 
+/*
+Creates a new thread, pushes it on the stack, and returns a pointer to a lua_State that represents this new thread. 
+The new thread returned by this function shares with the original thread its global environment, but has an independent execution stack.
+
+There is no explicit function to close or to destroy a thread. Threads are subject to garbage collection, like any Lua object.
+*/
 LUA_API lua_State *lua_newthread (lua_State *L) {
   global_State *g = G(L);
   lua_State *L1;
@@ -292,6 +298,13 @@ void luaE_freethread (lua_State *L, lua_State *L1) {
 }
 
 
+/*
+Creates a new thread running in a new, independent state. 
+Returns NULL if it cannot create the thread or the state (due to lack of memory). 
+The argument f is the allocator function; 
+Lua does all memory allocation for this state through this function (see lua_Alloc). 
+The second argument, ud, is an opaque pointer that Lua passes to the allocator in every call.
+*/
 LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   int i;
   lua_State *L;

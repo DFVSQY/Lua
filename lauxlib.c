@@ -1130,6 +1130,12 @@ static int panic (lua_State *L) {
 }
 
 /*
+Creates a new Lua state. 
+It calls lua_newstate with an allocator based on the standard C realloc function 
+and then sets a panic function that prints an error message to the standard error output in case of fatal errors.
+
+Returns the new state, or NULL if there is a memory allocation error.
+
 创建一个lua状态机，此时lua环境不包含任何预定义函数，甚至print也不包含，
 为了使lua足够小，所有的标准库都是以独立的package存在，如果不需要就可以不使用它们
 */

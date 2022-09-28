@@ -115,6 +115,13 @@ LUA_API int lua_checkstack (lua_State *L, int n) {
 }
 
 
+/*
+Exchange values between different threads of the same state.
+This function pops n values from the stack from, and pushes them onto the stack to.
+
+The function lua_xmove moves Lua values between two stacks in the same state. 
+A call like lua_xmove(F, T, n) pops n elements from the stack F and pushes them on T.
+*/
 LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   int i;
   if (from == to) return;
