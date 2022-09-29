@@ -1120,7 +1120,7 @@ void test_c_xml()
 	lua_close(L);
 }
 
-static void internal_c_resulme(lua_State *L)
+static void internal_c_resume(lua_State *L)
 {
 	/*
 	This function pushes the new thread on the stack, as a value of type "thread",
@@ -1174,7 +1174,7 @@ void test_c_resume()
 	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
 		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
 
-	internal_c_resulme(L);
+	internal_c_resume(L);
 
 	lua_close(L);
 }
