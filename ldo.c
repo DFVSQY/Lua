@@ -655,7 +655,8 @@ When it returns, the stack contains all values passed to lua_yield, or all value
 lua_resume returns LUA_YIELD if the coroutine yields, 
 LUA_OK if the coroutine finishes its execution without errors, or an error code in case of errors (see lua_pcall).
 
-In case of errors, the stack is not unwound, so you can use the debug API over it. The error object is on the top of the stack.
+In case of errors, the stack is not unwound, so you can use the debug API over it. 
+The error object is on the top of the stack.
 
 To resume a coroutine, you remove any results from the last lua_yield, 
 put on its stack only the values to be passed as results from yield, and then call lua_resume.

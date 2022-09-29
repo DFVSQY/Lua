@@ -1119,3 +1119,62 @@ void test_c_xml()
 
 	lua_close(L);
 }
+
+static void internal_c_resulme(lua_State *L)
+{
+	/*
+	This function pushes the new thread on the stack, as a value of type "thread",
+	and returns a lua_State pointer representing this new thread.
+
+	After running it, we will have two threads, L1 and L, both referring internally to the same Lua state.
+	Each thread has its own stack. The new thread L1 starts with an empty stack;
+	the old thread L has a reference to the new thread on top of its stack.
+	*/
+	lua_State *L1 = lua_newthread(L);
+
+	/*
+	To start running a coroutine, we use lua_resume as we use lua_pcall:
+	we push the function to be called(which is the coroutine body),
+	push its arguments, and call lua_resume passing in narg the number of arguments.
+	*/
+	lua_getglobal(L1, "foo1");
+	lua_pushinteger(L1, 20);
+
+	/*
+	When lua_resume returns LUA_YIELD,
+	the visible part of the thread's stack contains only the values passed to yield.
+
+	The call to lua_resume will return LUA_YIELD, to signal that the thread yielded.
+	At this point, the L1 stack has the values given to yield
+	*/
+	lua_resume(L1, L, 1);
+
+	printf("%d\n", lua_gettop(L1));			/* 2 */
+	printf("%lld\n", lua_tointeger(L1, 1)); /* 22 */
+	printf("%lld\n", lua_tointeger(L1, 2)); /* 21 */
+
+	/*
+	When we resume the thread again, it continues from where it stopped (the call to yield).
+	From there, foo returns to foo1, which in turn returns to lua_resume.
+
+	This second call to lua_resume will return LUA_OK, which means a normal return.
+	*/
+	lua_resume(L1, L, 0);
+	printf("%d\n", lua_gettop(L1)); /* 1 */
+
+	printf("%lld\n", lua_tointeger(L1, 1)); /* 40 */
+}
+
+void test_c_resume()
+{
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+
+	const char *fname = "learn\\lua\\lua_thread.lua";
+	if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+		error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+	internal_c_resulme(L);
+
+	lua_close(L);
+}

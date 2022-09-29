@@ -85,3 +85,5 @@ void test_c_array();
 void test_c_dir();
 
 void test_c_xml();
+
+void test_c_resume();
