@@ -708,6 +708,30 @@ LUA_API int lua_isyieldable (lua_State *L) {
 }
 
 
+/*
+Yields a coroutine (thread).
+
+When a C function calls lua_yieldk, the running coroutine suspends its execution, 
+and the call to lua_resume that started this coroutine returns. 
+The parameter nresults is the number of values from the stack that will be passed as results to lua_resume.
+
+When the coroutine is resumed again, 
+Lua calls the given continuation function k to continue the execution of the C function that yielded. 
+This continuation function receives the same stack from the previous function, 
+with the n results removed and replaced by the arguments passed to lua_resume. 
+Moreover, the continuation function receives the value ctx that was passed to lua_yieldk.
+
+Usually, this function does not return; 
+when the coroutine eventually resumes, it continues executing the continuation function. 
+However, there is one special case, which is when this function is called from inside a line or a count hook. 
+In that case, lua_yieldk should be called with no continuation (probably in the form of lua_yield) and no results,
+and the hook should return immediately after the call. 
+Lua will yield and, when the coroutine resumes again, 
+it will continue the normal execution of the (Lua) function that triggered the hook.
+
+This function can raise an error if it is called from a thread with a pending C call with no continuation function, 
+or it is called from a thread that is not running inside a resume (e.g., the main thread).
+*/
 LUA_API int lua_yieldk (lua_State *L, int nresults, lua_KContext ctx,
                         lua_KFunction k) {
   CallInfo *ci = L->ci;

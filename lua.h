@@ -330,6 +330,10 @@ LUA_API int  (lua_resume)     (lua_State *L, lua_State *from, int narg);
 LUA_API int  (lua_status)     (lua_State *L);
 LUA_API int (lua_isyieldable) (lua_State *L);
 
+/*
+This function is equivalent to lua_yieldk, but it has no continuation. 
+Therefore, when the thread resumes, it continues the function that called the function calling lua_yield.
+*/
 #define lua_yield(L,n)		lua_yieldk(L, (n), 0, NULL)
 
 
