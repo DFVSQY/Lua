@@ -14,5 +14,4 @@ pacman -S mingw-w64-clang-x86_64-toolchain
 ```
 
 ## Snapshot:
-
-![截图](learn\res\Snipaste_2022-10-19_21-02-25.png)
+![截图](learn/res/Snipaste_2022-10-19_21-02-25.png)
