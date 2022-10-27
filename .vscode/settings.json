@@ -15,6 +15,6 @@
 		"editor.links": false
 	},
 	"cmake.debugConfig": {
-		"cwd": "D:\\LearnGameRepo\\Lua"
+		"cwd": "${workspaceFolder}"
 	}
 }
