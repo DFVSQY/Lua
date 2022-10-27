@@ -956,7 +956,7 @@ static void use_registry_store_lua_value_2_c(lua_State *L)
 	lua_pushlightuserdata(L, (void *)&key); /* push address key */
 	lua_gettable(L, LUA_REGISTRYINDEX);		/* get value  */
 	const char *str = lua_tostring(L, -1);	/* convert to string */
-	printf(str);
+	printf("%s", str);
 }
 
 /* use_registry_store_lua_value_2_c 的简化版 */
@@ -990,7 +990,7 @@ static void use_registry_store_lua_value_2_c_simple(lua_State *L)
 	/* 取字符串从registry */
 	lua_rawgetp(L, LUA_REGISTRYINDEX, (void *)&key);
 	const char *str = lua_tostring(L, -1); /* convert to string */
-	printf(str);
+	printf("%s", str);
 }
 
 void test_use_registry()

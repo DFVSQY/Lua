@@ -5,29 +5,20 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "(gdb) Launch",
-			"type": "cppdbg",
+			"name": "Main_Src",
+			"type": "lldb",
 			"request": "launch",
-			"program": "${workspaceFolder}\\learn\\bin\\main.exe",
+			"program": "${workspaceFolder}/build/bin/main_src.exe",
 			"args": [],
-			"stopAtEntry": false,
-			"cwd": "${workspaceFolder}",
-			"environment": [],
-			"externalConsole": false,
-			"MIMode": "gdb",
-			"miDebuggerPath": "gdb",				// 要保证gdb放在了环境变量中
-			"setupCommands": [
-				{
-					"description": "Enable pretty-printing for gdb",
-					"text": "-enable-pretty-printing",
-					"ignoreFailures": true
-				},
-				{
-					"description":  "Set Disassembly Flavor to Intel",
-					"text": "-gdb-set disassembly-flavor intel",
-					"ignoreFailures": true
-				}
-			],
+			"cwd": "${workspaceFolder}"
+		},
+		{
+			"name": "Main",
+			"type": "lldb",
+			"request": "launch",
+			"program": "${workspaceFolder}/build/bin/main.exe",
+			"args": [],
+			"cwd": "${workspaceFolder}"
 		}
 	]
 }

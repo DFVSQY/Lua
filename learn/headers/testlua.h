@@ -6,8 +6,8 @@
 
 typedef struct
 {
-	char *name;
-	unsigned char red, green, blue;
+    char *name;
+    unsigned char red, green, blue;
 } ColorTable;
 
 void dump_stack(lua_State *L);
@@ -68,7 +68,7 @@ void test_operate_array();
 
 void test_operate_string();
 
-void reg_split_string();
+void reg_split_string(lua_State *L);
 
 void reg_tconcat(lua_State *L);
 

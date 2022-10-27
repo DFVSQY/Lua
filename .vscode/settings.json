@@ -4,6 +4,14 @@
 		"lua.h": "c",
 		"lauxlib.h": "c"
 	},
-	"C_Cpp.default.cppStandard": "gnu++98",
-	"C_Cpp.default.intelliSenseMode": "gcc-x64"
+	"cmake.generator": "MinGW Makefiles",
+	"clangd.arguments": [
+		"--query-driver=F:\\msys64\\clang64\\bin\\clang.exe",
+		"--clang-tidy",
+		"--header-insertion=never"
+	],
+	"clangd.path": "F:\\msys64\\clang64\\bin\\clangd.exe",
+	"[c]": {
+		"editor.links": false
+	},
 }
