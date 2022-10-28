@@ -59,10 +59,10 @@ target_link_libraries(mymathlib PUBLIC lua)
 set_target_properties(mymathlib PROPERTIES PREFIX "")
 
 # mytuple dll
-set(MYMATH_DLL
+set(MYTUPLE_DLL
 	learn/src/mytuple.c
 )
-add_library(mytuplelib SHARED ${MYMATH_DLL})
+add_library(mytuplelib SHARED ${MYTUPLE_DLL})
 target_link_libraries(mytuplelib PUBLIC lua)
 set_target_properties(mytuplelib PROPERTIES PREFIX "")
 
@@ -99,7 +99,7 @@ target_link_libraries(dir PUBLIC lua)
 set_target_properties(dir PROPERTIES PREFIX "")
 
 # lxp dll
-set(MY_DIR_DLL
+set(MY_LXP_DLL
 	learn/src/lxp.c
 	learn/src/expat/xmlparse.c
 	learn/src/expat/xmlrole.c
@@ -107,17 +107,17 @@ set(MY_DIR_DLL
 	learn/src/expat/xmltok_ns.c
 	learn/src/expat/xmltok.c
 )
-add_library(lxp SHARED ${MY_DIR_DLL})
+add_library(lxp SHARED ${MY_LXP_DLL})
 target_include_directories(lxp PRIVATE learn/headers/expat)
 target_link_libraries(lxp PUBLIC lua)
 set_target_properties(lxp PROPERTIES PREFIX "")
 
 # main exe
-set(MAIN_SRC
+set(MAIN
 	learn/src/main.c
 	learn/src/testlua.c
 )
-add_executable(main ${MAIN_SRC})
+add_executable(main ${MAIN})
 target_link_libraries(main PRIVATE lua)
 
 # ------------------------------ Main Src ---------------------------------
