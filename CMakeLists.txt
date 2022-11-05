@@ -112,6 +112,14 @@ target_include_directories(lxp PRIVATE learn/headers/expat)
 target_link_libraries(lxp PUBLIC lua)
 set_target_properties(lxp PROPERTIES PREFIX "")
 
+# lproc dll
+set(MY_LPROC_DLL
+	learn/src/lproc.c
+)
+add_library(lproc SHARED ${MY_LPROC_DLL})
+target_link_libraries(lproc PUBLIC lua pthread)
+set_target_properties(lproc PROPERTIES PREFIX "")
+
 # main exe
 set(MAIN
 	learn/src/main.c
