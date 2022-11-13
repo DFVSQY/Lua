@@ -1183,3 +1183,15 @@ void test_c_proc()
 
     lua_close(L);
 }
+
+void test_lua_code()
+{
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    const char *fname = "learn\\lua\\main.lua";
+    if (luaL_loadfile(L, fname) || lua_pcall(L, 0, 0, 0))
+        error(L, "cannot run config file, error msg:%s", lua_tostring(L, -1));
+
+    lua_close(L);
+}

@@ -89,3 +89,5 @@ void test_c_xml();
 void test_c_resume();
 
 void test_c_proc();
+
+void test_lua_code();
