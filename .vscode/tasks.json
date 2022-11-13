@@ -6,11 +6,7 @@
         {
             "label": "运行Main",
             "type": "process",
-            "command": "${workspaceFolder}\\build\\bin\\main.exe",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            }
+            "command": "${workspaceFolder}\\build\\bin\\main.exe"
         },
         {
             "label": "运行MainSrc",
