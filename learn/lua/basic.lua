@@ -42,3 +42,44 @@ do
 		print(a, b)
 	end
 end
+
+-- There are eight basic types in Lua:
+-- nil, Boolean, number, string, userdata, function, thread, and table
+do
+	print(type(nil))            --> nil
+	print(type(true))           --> boolean
+	print(type(10.4 * 3))       --> number
+	print(type("Hello world"))  --> string
+	print(type(io.stdin))       --> userdata
+	print(type(print))          --> function
+	print(type(type))           --> function
+	print(type({}))             --> table
+	print(type(type(X)))        --> string
+
+	local co = coroutine.create(function()
+		print("hi")
+	end)
+	print(type(co))   --> thread: 0x8071d98
+end
+
+-- The result of the and operator is its first operand if that operand is false;
+-- otherwise, the result is its second operand.
+-- The result of the or operator is its first operand if it is not false;
+-- otherwise, the result is its second operand
+do
+	print(4 and 5)         	--> 5
+    print(nil and 13)      	--> nil
+    print(false and 13)    	--> false
+    print(0 or 5)          	--> 0
+    print(false or "hi")   	--> "hi"
+	print(nil or false)    	--> false
+end
+
+-- The not operator always gives a Boolean value
+do
+	print(not nil)      	--> true
+    print(not false)    	--> true
+    print(not 0)        	--> false
+    print(not not 1)    	--> true
+	print(not not nil)  	--> false
+end
