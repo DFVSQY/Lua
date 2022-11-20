@@ -138,3 +138,18 @@ end
 ]]
 print(4 ^ 0.5)								-- 2.0
 print(8 ^ (1 / 3))							-- 2.0
+
+--[[
+	Lua provides the following relational operators:
+	<   >   <=  >=  ==  ~=
+
+	All these operators always produce a Boolean value.
+
+	Comparison of numbers always disregards their subtypes;
+	it makes no difference whether the number is represented as an integer or as a float.
+	What matters is its mathematical value.
+	(Nevertheless, it is slightly more efficient to compare numbers with the same subtypes.)
+]]
+print(3 ~= nil)								-- true
+print(3 == 3.0)								-- true
+print(3 >= 5.0)								-- false
