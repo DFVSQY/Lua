@@ -153,3 +153,22 @@ print(8 ^ (1 / 3))							-- 2.0
 print(3 ~= nil)								-- true
 print(3 == 3.0)								-- true
 print(3 >= 5.0)								-- false
+
+--[[
+	Lua provides a standard math library with a set of mathematical functions.
+	All trigonometric functions work in radians.
+	We can use the functions deg and rad to convert between degrees and radians.
+]]
+print(math.pi)								-- 3.1415926535898
+print(math.huge)							-- inf
+print(math.sin(math.pi / 6))				-- 0.5
+print(math.deg(math.pi))					-- 180.0
+print(math.rad(180))						-- 3.1415926535898
+
+--[[
+	Random-number generator
+]]
+math.randomseed(os.time())					-- default seed is 1
+print(math.random())						-- [0,1)
+print(math.random(6))						-- [1,6]
+print(math.random(1, 10))					-- [1,10]
