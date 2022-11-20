@@ -172,3 +172,37 @@ math.randomseed(os.time())					-- default seed is 1
 print(math.random())						-- [0,1)
 print(math.random(6))						-- [1,6]
 print(math.random(1, 10))					-- [1,10]
+
+--[[
+	Rounding functions
+
+	The math library offers three rounding functions: floor, ceil, and modf.
+	Floor rounds towards minus infinite, ceil rounds towards plus infinite, and modf rounds towards zero.
+	They return an integer result if it fits in an integer;
+	otherwise, they return a float (with an integral value, of course).
+	The function modf, besides the rounded value, also returns the fractional part of the number as a second result.
+]]
+print(math.floor(3.3))						-- 3
+print(math.floor(-3.3))						-- -4
+print(math.ceil(3.3))						-- 4
+print(math.ceil(-3.3))						-- -3
+print(math.modf(3.3))						-- 3       0.3
+print(math.modf(-3.3))						-- -3      -0.3
+print(math.floor(2^70))						-- 1.1805916207174e+21
+do
+	local function round(x)
+		local f = math.floor(x)
+		if x == f then return f end
+		return math.floor(x + 0.5)
+	end
+
+	print(math.floor(2^52 + 1))				-- 4503599627370497
+	print(math.floor(2^52 + 1.5))			-- 4503599627370498	(It's wrong result, it should be 4503599627370497)
+	print(round(2^52 + 1))					-- 4503599627370497
+	print(round(3.5))						-- 4
+	print(round(3.2))						-- 3
+	print(round(3.7))						-- 4
+	print(round(-3.5))						-- -3
+	print(round(-3.2))						-- -3
+	print(round(-3.7))						-- -4
+end
