@@ -204,3 +204,39 @@ do
 	print(round(-3.2))						-- -3
 	print(round(-3.7))						-- -4
 end
+
+--[[
+	Representation Limits
+]]
+do
+	print(math.maxinteger)					-- 9223372036854775807 (this is 2^63 - 1)
+	print(0x7fffffffffffffff)				-- 9223372036854775807
+	print(2^63 - 1)							-- 9.2233720368548e+18 (because it's a float number in Lua, it doesn't equal math.maxinteger)
+
+	print(math.mininteger)					-- -9223372036854775808 (this is -(2^63))
+	print(-(2^63))							-- -9.2233720368548e+18 (because it's a float number in Lua, it doesn't equal math.mininteger)
+	print(0x8000000000000000)				-- -9223372036854775808
+end
+
+--[[
+	When we compute an integer operation that would result in a value smaller than
+	mininteger or larger than maxinteger, the result wraps around.
+]]
+do
+	print(math.maxinteger + 1 == math.mininteger)				-- true
+	print(math.mininteger - 1 == math.maxinteger)				-- true
+	print(-math.mininteger == math.mininteger)					-- true
+	print(math.mininteger // -1 == math.mininteger)				-- true
+end
+
+--[[
+	float precision
+]]
+do
+	print(12.7 - 20 + 7.3)										-- -8.8817841970013e-16
+
+	print(math.maxinteger + 2)									-- -9223372036854775807 (wrong result)
+	print(math.maxinteger + 2.0)								-- 9.2233720368548e+18 (wrong result)
+
+	print(math.maxinteger + 1.0 ==  math.maxinteger + 2.0)		-- true (float addition)
+end
