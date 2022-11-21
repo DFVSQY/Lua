@@ -106,9 +106,7 @@ print(-9 // -2)								-- 4
 	If both operands are integers, the result is an integer; otherwise, the result is a float.
 
 	For integer operands, modulo has the usual meaning,
-	with the result always having the same sign as the second  argument.
-
-
+	with the result always having the same sign as the second argument.
 ]]
 print(4 % 2)								-- 0
 print(4.0 % 2)								-- 0.0
