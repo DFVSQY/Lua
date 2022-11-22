@@ -43,3 +43,37 @@ do
 	print("hello " .. "lua")						-- hello lua
 	print("lua5" .. 3)								-- lua53
 end
+
+--[[
+	We can delimit literal strings by single or double matching quotes.
+]]
+do
+	local a = "Hello"
+	local b = 'World'
+	print(a, b)										-- Hello   World
+end
+
+--[[
+	We can specify a character in a literal string also by its numeric value through the escape sequences \ddd and \xhh,
+	where ddd is a sequence of up to three decimal digits and hh is a sequence of exactly two hexadecimal digits.
+]]
+do
+	local a = 'ALO123'
+	local b = '\x41LO\04923'						-- 0x41 (65 in decimal) is the ASCII code for A, and 49 is the code for the digit 1
+	print(a)										-- ALO123
+	print(b)										-- ALO123
+	print('\x41\x4c\x4f\x31\x32\x33')				-- ALO123
+
+	local c = '\x41BC\97bc'
+	local d = '\x41BC\097bc'
+	print(c)										-- ABCabc
+	print(d)										-- ABCabc
+end
+
+--[[
+	Since Lua 5.3, we can also specify UTF-8 characters with the escape sequence \u{h... h};
+	we can write any number of hexadecimal digits inside the brackets.
+]]
+do
+	print("\u{4E2D}\u{56FD}")						-- 中国
+end
