@@ -11,7 +11,13 @@
         {
             "label": "运行MainSrc",
             "type": "process",
-            "command": "${workspaceFolder}\\build\\bin\\main_src.exe",
+            "command": "cmd",
+            "args": [
+                "/C",
+                "chcp 65001",
+                "&&",
+                "${workspaceFolder}\\build\\bin\\main_src.exe"
+            ],
             "group": {
                 "kind": "test",
                 "isDefault": true
