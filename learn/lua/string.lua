@@ -77,3 +77,80 @@ end
 do
 	print("\u{4E2D}\u{56FD}")						-- 中国
 end
+
+--[[
+	We can delimit literal strings also by matching double square brackets, as we do with long comments.
+	Literals in this bracketed form can run for several lines and do not interpret escape sequences.
+	Moreover, it ignores the first character of the string when this character is a newline.
+	This form is especially convenient for writing strings that contain large pieces of code.
+]]
+do
+	local ss = [[
+		<html>
+		<head>
+			<title>An HTML Page</title>
+		</head>
+		<body>
+			<a href="http://www.lua.org">Lua</a>
+		</body>
+		</html>
+	]]
+	print(ss)										-- <html>
+													-- <head>
+													-- 		<title>An HTML Page</title>
+													-- </head>
+													-- <body>
+													-- 		<a href="http://www.lua.org">Lua</a>
+													-- </body>
+													-- </html>
+end
+
+--[=[
+	Sometimes, we may need to enclose a piece of code containing something like a = b[c[i]] (notice the ]] in this code),
+	or we may need to enclose some code that already has some code commented out.
+	To handle such cases, we can add any number of equals signs between the two opening brackets, as in [===[.
+	After this change, the literal string ends only at the next closing brackets with the same number of equals signs
+	in between (]===], in our example).  The scanner ignores any pairs of brackets with a different number of equals signs.
+	By choosing an appropriate number of signs, we can enclose any literal string without having to modify it in any way.
+
+	This same facility is valid for comments, too.
+]=]
+do
+	local ss = [=[
+		local b, c = [1], ['file']
+		local a = b[c[i]]
+		print(a)
+	]=]
+	print(ss)										-- local b, c = [1], ['file']
+													-- local a = b[c[i]]
+													-- print(a)
+end
+
+--[[
+	Long strings are the ideal format to include literal text in our code,
+	but we should not use them for non-text literal
+]]
+do
+	local ss = [[
+		\u{4E2D}\u{56FD}
+		\x41BC\097bc
+		\x41LO\04923
+	]]
+	print(ss)										-- \u{4E2D}\u{56FD}
+													-- \x41BC\097bc
+													-- \x41LO\04923
+end
+
+--[[
+	Moreover, end-of-line sequences like "\r\n" may be normalized to "\n" when read.
+	Instead, it is better to code arbitrary binary data using numeric escape sequences either in decimal or in hexadecimal.
+
+	 However, this poses a problem for long strings, because they would result in quite long lines.
+	 For those situations, since version 5.2 Lua offers the escape sequence \z:
+	 it skips all subsequent space characters in the string until the first non-space character.
+]]
+do
+	local ss = "Hello Lua Code Editor: \z
+				Visual Studio Code"
+	print(ss)										-- Hello Lua Code Editor: Visual Studio Code
+end
