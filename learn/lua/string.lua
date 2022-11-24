@@ -154,3 +154,79 @@ do
 				Visual Studio Code"
 	print(ss)										-- Hello Lua Code Editor: Visual Studio Code
 end
+
+--[[
+	Lua provides automatic conversions between numbers and strings at run time.
+	Any numeric operation applied to a string tries to convert the string to a number.
+	Conversely, whenever Lua finds a number where it expects a string, it converts the number to a string.
+
+	The rule for arithmetic operations is that the result is an integer only when both operands are integers;
+	a string is not an integer, so any arithmetic operation with strings is handled as a floating-point operation.
+]]
+do
+	print("10" + 2)									-- 12.0
+	print(tonumber("10") + 2)						-- 12
+	print("10" + "20")								-- 30.0
+	print(math.sin(tostring(math.pi) / 6))			-- 0.5
+
+	print(10 .. 24 .. "code")						-- 1024code
+	print(string.len(1024))							-- 4
+end
+
+--[[
+	When we write the concatenation operator right after a numeral, we must separate them with a space;
+	otherwise, Lua thinks that the first dot is a decimal point.
+]]
+do
+	print(10 .. 20)									-- 1020
+	print(10 ..20)									-- 1020
+	-- print(10.. 20)								-- this is wrong, malformed number near '10..'
+	-- print(10... 20)								-- this is wrong, malformed number near '10...'
+end
+
+--[[
+	To convert a string to a number explicitly, we can use the function tonumber,
+	which returns nil if the string does not denote a proper number.
+	Otherwise, it returns integers or floats, following the same rules of the Lua scanner.
+]]
+do
+	print(tonumber("  -3 "))        				-- -3
+	print(tonumber(" 10e4 "))       				-- 100000.0
+	print(tonumber("10e"))          				-- nil   (not a valid number)
+	print(tonumber("0x1.3p-4"))     				-- 0.07421875
+end
+
+--[[
+	By default, tonumber assumes decimal notation, but we can specify any base between 2 and 36 for the conversion.
+]]
+do
+	print(tonumber("100101", 2))       				-- 37
+	print(tonumber("fff", 16))         				-- 4095
+	print(tonumber("-ZZ", 36))         				-- -1295
+
+	-- the string does not represent a proper numeral in the given base, so tonumber returns nil
+	print(tonumber("987", 8))          				-- nil
+end
+
+--[[
+	To convert a number to a string, we can call the function tostring
+]]
+do
+	print(tostring(10) == "10")						-- true
+end
+
+--[[
+	Unlike arithmetic operators, order operators never coerce their arguments. 
+	Moreover, 2 < 15 is obviously true, but "2" < "15" is false (alphabetical order).
+	To avoid inconsistent results, Lua raises an error when we mix strings and numbers in an order comparison, 
+	such as 2 < "15".
+]]
+do
+	print(2 < 15)									-- true
+	print("2" < "15")								-- false
+
+	local suc, msg = pcall(function()
+		print(2 < "15")
+	end)
+	print(suc, msg)									-- false	learn/lua/string.lua:229: attempt to compare number with string
+end
