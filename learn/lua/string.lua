@@ -216,9 +216,9 @@ do
 end
 
 --[[
-	Unlike arithmetic operators, order operators never coerce their arguments. 
+	Unlike arithmetic operators, order operators never coerce their arguments.
 	Moreover, 2 < 15 is obviously true, but "2" < "15" is false (alphabetical order).
-	To avoid inconsistent results, Lua raises an error when we mix strings and numbers in an order comparison, 
+	To avoid inconsistent results, Lua raises an error when we mix strings and numbers in an order comparison,
 	such as 2 < "15".
 ]]
 do
