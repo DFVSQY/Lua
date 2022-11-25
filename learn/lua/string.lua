@@ -230,3 +230,128 @@ do
 	end)
 	print(suc, msg)									-- false	learn/lua/string.lua:229: attempt to compare number with string
 end
+
+--[[
+	The power of a raw Lua interpreter to manipulate strings is quite limited.
+	A program can create string literals, concatenate them, compare them, and get string lengths.
+	However, it cannot extract substrings or examine their contents.
+	The full power to manipulate strings in Lua comes from its string library.
+
+	The call string.len(s) returns the length of a string s; it is equivalent to #s.
+]]
+do
+	local a = "vscode"
+	print(#a, string.len(a))										-- 6	6
+
+	local b = "学习Lua"
+	print(#b, string.len(b))										-- 9	9
+
+	local c = string.rep(b, 5, ":")
+	print(c, #c, string.len(c))										-- 学习Lua:学习Lua:学习Lua:学习Lua:学习Lua	49	49
+
+	local d = string.reverse("Hello World")
+	print(d)														-- dlroW olleH
+
+	local e = string.lower("Hello World")
+	print(e)														-- hello world
+
+	local f = string.upper("Hello World");
+	print(f)														-- HELLO WORLD
+
+	local title = "selection"
+	print(string.sub(title, 1, -1))									-- selection
+	print(string.sub(title, 1, 4))									-- sele
+	print(string.sub(title, 5, -1))									-- ction
+	print(string.sub(title, -1, -1))								-- n
+end
+
+--[[
+	The functions string.char and string.byte convert between characters and their internal numeric representations.
+	The function string.char gets zero or more integers, converts each one to a character,
+	and returns a string concatenating all these characters.
+	The call string.byte(s, i) returns the internal numeric representation of the i-th character of the string s;
+	the second argument is optional; the call string.byte(s) returns the internal numeric representation of the first
+	(or single) character of s
+]]
+do
+	local a = string.char(97, 98, 99)
+	print(a)														-- abc
+
+	local b = "abc"
+	print(string.byte(b, 1, -1))									-- 97      98      99
+end
+
+--[[
+	A nice idiom is {string.byte(s, 1, -1)}, which creates a list with the codes of all characters in s.
+	(This idiom only works for strings somewhat shorter than 1 MB. Lua limits its stack size,
+	which in turn limits the maximum number of returns from a function. The default stack limit is one million entries.)
+]]
+do
+	local codes = {string.byte("abc", 1, -1)}
+	print(codes[1], codes[2], codes[3])								-- 97      98      99
+end
+
+--[[
+	The function string.format is a powerful tool for formatting strings and converting numbers to strings.
+	It returns a copy of its first argument, the so-called format string,
+	with each directive in that string replaced by a formatted version of its correspondent argument.
+	The directives in the format string have rules similar to those of the C function printf.
+	A directive is a percent sign plus a letter that tells how to format the argument:
+	d for a decimal integer, x for hexadecimal, f for a floating-point number, s for strings, plus several others
+]]
+do
+	print(string.format("x = %d  y = %d", 10, 20))   							-- x = 10  y = 20
+    print(string.format("x = %x", 200))              							-- x = c8
+    print(string.format("x = 0x%X", 200))            							-- x = 0xC8
+    print(string.format("x = 0x%x", 200))            							-- x = 0xc8
+    print(string.format("x = %f", 200))              							-- x = 200.000000
+
+    local tag, title = "h1", "a title"
+    print(string.format("<%s>%s</%s>", tag, title, tag))						-- <h1>a title</h1>
+end
+
+--[[
+	Between the percent sign and the letter, a directive can include other options that control the details of
+	the formatting, such as the number of decimal digits of a floating-point number.
+]]
+do
+	-- the %.4f means a floating-point number with four digits after the decimal point.
+	print(string.format("pi = %.4f", math.pi))      							-- pi = 3.1416
+
+	-- the %02d means a decimal number with zero padding and at least two digits
+	-- the %2d, without the zero, would use blanks for padding.
+    local d, m, y = 5, 11, 1990
+    print(string.format("%02d/%02d/%04d", d, m, y)) 							-- 05/11/1990
+    print(string.format("%2d/%2d/%4d", d, m, y)) 								--  5/11/1990
+end
+
+--[[
+	We can call all functions from the string library as methods on strings, using the colon operator.
+]]
+do
+	local a = "VSCode"
+	print(a:sub(3, -1))															-- Code
+
+	local b = "Hello World"
+	print(b:lower())															-- hello world
+end
+
+--[[
+	The string library includes also several functions based on pattern matching.
+	The function string.find searches for a pattern in a given string.
+	It returns the initial and final positions of the pattern in the string, or nil if it cannot find the pattern.
+]]
+do
+	print(string.find("hello world", "wor"))   									-- 7   9
+    print(string.find("hello world", "war"))   									-- nil
+end
+
+--[[
+	The function string.gsub (Global SUBstitution) replaces all occurrences of a pattern in a string with another string.
+	It also returns, as a second result, the number of replacements it made.
+]]
+do
+	print(string.gsub("hello world", "l", "."))     							-- he..o wor.d    3
+	print(string.gsub("hello world", "ll", ".."))   							-- he..o world    1
+	print(string.gsub("hello world", "a", "."))     							-- hello world    0
+end
