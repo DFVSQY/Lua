@@ -355,3 +355,93 @@ do
 	print(string.gsub("hello world", "ll", ".."))   							-- he..o world    1
 	print(string.gsub("hello world", "a", "."))     							-- hello world    0
 end
+
+--[[
+	Since version 5.3, Lua includes a small library to support operations on Unicode strings encoded in UTF-8.
+	Even before that library, Lua already offered a reasonable support for UTF-8 strings.
+
+	Lua's operating-system library and I/O library are mainly interfaces to the underlying system,
+	so their support for UTF-8 strings depends on that underlying system. On Linux, for instance,
+	we can use UTF-8 for file names, but Windows uses UTF-16.  Therefore, to manipulate Unicode file names on Windows,
+	we need either extra libraries or changes to the standard Lua libraries.
+
+	The concatenation operation works correctly for UTF-8 strings.
+	String order operators (less than, less equal, etc.) compare UTF-8 strings following
+	the order of their character codes in Unicode.
+]]
+do
+	local s = "中国" .. "人民"
+	print(s)																	-- 中国人民
+
+	print("中" < "国")															-- true
+end
+
+--[[
+	Let us now see how functions from the string library handle UTF-8 strings. The functions reverse, upper, lower, byte,
+	and char do not work for UTF-8 strings, as all of them assume that one character is equivalent to one byte.
+	The functions string.format and string.rep work without problems with UTF-8 strings except for the format option '%c',
+	which assumes that one character is one byte. The functions string.len and string.sub work correctly with UTF8 strings.
+	with indices referring to byte counts (not character counts). More often than not, this is what we need.
+
+	Most functions in the utf8 library work with indices in bytes.
+]]
+do
+	local s = "中国"
+	print(string.reverse(s) == "国中")											-- false
+	print(string.rep(s, 3, ":"))												-- 中国:中国:中国
+	print(string.format("s is %s", s))											-- s is 中国
+
+	print(string.len("中华"))														-- 6 (this is byte counts)
+	print(string.len("共和国"))														-- 9 (this is byte counts)
+	print(string.sub("中华人民共和国", 7, -10))										-- 人民
+end
+
+--[[
+	The function utf8.len returns the number of UTF-8 characters (codepoints) in a given string.
+	Moreover, it validates the string: if it finds any invalid byte sequence,
+	it returns false plus the position of the first invalid byte.
+]]
+do
+	print(utf8.len("中华人民共和国"))											-- 7
+	print(utf8.len("中国\x93"))													-- nil	7 (utf8.len find invalid byte sequence)
+end
+
+--[[
+	The functions utf8.char and utf8.codepoint are the equivalent of string.char and string.byte in the UTF-8 world.
+
+	Most functions in the utf8 library work with indices in bytes.
+	If we want to use character indices, the function utf8.offset converts a character position to a byte position.
+	s in the string library, the character index for utf8.offset can be negative,
+	in which case the counting is from the end of the string.
+]]
+do
+	print(utf8.codepoint("中华人民共和国", 7, -10))								-- 20154	27665
+	print(utf8.char(20154, 27665))												-- 人民
+
+	local start_offset = utf8.offset("中华人民共和国", 3)
+	print(start_offset)															-- 7
+
+	local end_offset = utf8.offset("中华人民共和国", -4)
+	print(end_offset)															-- 10
+
+	print(utf8.codepoint("中华人民共和国", start_offset, -end_offset))				-- 20154	27665
+end
+
+--[[
+	The last function in the utf8 library is utf8.codes.
+	It allows us to iterate over the characters in a UTF-8 string.
+]]
+do
+	for i, c in utf8.codes("中华人民共和国") do
+        print(i, c, utf8.char(c))
+    end
+
+	-- output:
+	-- 1       20013	中
+	-- 4       21326	华
+	-- 7       20154	人
+	-- 10      27665	民
+	-- 13      20849	共
+	-- 16      21644	和
+	-- 19      22269	国
+end
