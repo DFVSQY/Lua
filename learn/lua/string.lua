@@ -145,9 +145,9 @@ end
 	Moreover, end-of-line sequences like "\r\n" may be normalized to "\n" when read.
 	Instead, it is better to code arbitrary binary data using numeric escape sequences either in decimal or in hexadecimal.
 
-	 However, this poses a problem for long strings, because they would result in quite long lines.
-	 For those situations, since version 5.2 Lua offers the escape sequence \z:
-	 it skips all subsequent space characters in the string until the first non-space character.
+	However, this poses a problem for long strings, because they would result in quite long lines.
+	For those situations, since version 5.2 Lua offers the escape sequence \z:
+	it skips all subsequent space characters in the string until the first non-space character.
 ]]
 do
 	local ss = "Hello Lua Code Editor: \z
