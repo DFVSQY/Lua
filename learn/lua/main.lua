@@ -6,4 +6,6 @@ print("-------------------- start learn lua --------------------")
 
 -- dofile("learn/lua/numbers.lua")
 
-dofile("learn/lua/string.lua")
+-- dofile("learn/lua/string.lua")
+
+dofile("learn/lua/table.lua")
