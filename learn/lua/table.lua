@@ -168,4 +168,26 @@ do
 	print(color.r, color.g, color.b)			-- 10	20	 5
 end
 
+--[[
+	To represent a conventional array or a list, we simply use a table with integer keys.
+	There is neither a way nor a need to declare a size; we just initialize the elements we need.
+
+	We call such a list without holes a sequence(start index is 1), holes are nil elements inside array/list.
+	For sequences, Lua offers the length operator (#). As we have seen, on strings it gives the number of
+	bytes in the string. On tables, it gives the length of the sequence represented by the table.
+
+	More precisely, a sequence is a table where the positive numeric keys comprise a set {1,...,n} for some n.
+	(Remember that any key with value nil is actually not in the table.)
+	In particular, a table with no numeric keys is a sequence with length zero.
+]]
+do
+	local a = {}
+	for i = 1, 10 do
+		a[i] = i
+	end
+	print(#a)									-- 10
+
+	local color = {r = 20, g = 10, b = 30}
+	print(#color)								-- 0
+end
 
