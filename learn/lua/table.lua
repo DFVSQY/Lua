@@ -50,3 +50,37 @@ do
 	-- d       D
 	-- a       A
 end
+
+--[[
+	Like global variables, table fields evaluate to nil when not initialized. Also like global variables,
+	we can assign nil to a table field to delete it. This is not a coincidence: Lua stores global variables
+	in ordinary tables.
+
+	To represent structures, we use the field name as an index.
+	Lua supports this representation by providing a.name as syntactic sugar for a["name"]
+]]
+do
+	local t = {}
+	t.a = 10									-- same as t["a"]
+	print(t["a"], t.a)							-- 10	10
+	print(t.x, t.y)								-- nil	nil
+
+	local key = {}
+	t[key] = "key"
+	print(t[key], t.key, t["key"])				-- key		nil		nil
+
+	t[10] = 10
+	print(t[10], t[010])						-- 10	10
+
+	--[[
+		2 compares equal to 2.0, both values refer to the same table entry, when used as keys.
+		More specifically, when used as a key, any float value that can be converted to an integer is converted.
+		For instance, when Lua executes a[2.0] = 10, it converts the key 2.0 to 2.
+		Float values that cannot be converted to integers remain unaltered.
+	]]
+	t[2.0] = 2
+	print(t[2.0], t[2])							-- 2	2
+
+	t[3.5] = 3.50
+	print(t[3.5], t[3.50])						-- 3.5	3.5
+end
