@@ -84,3 +84,88 @@ do
 	t[3.5] = 3.50
 	print(t[3.5], t[3.50])						-- 3.5	3.5
 end
+
+--[[
+	Constructors are expressions that create and initialize tables. They are a distinctive feature of Lua and
+	one of its most useful and versatile mechanisms. The simplest constructor is the empty constructor, {},
+	Constructors also initialize lists.
+]]
+do
+	local t1 = {"file", "edit", "selection"}
+
+	-- This previous line is equivalent to these commands
+	local t2 = {}
+	t2[1] = "file"
+	t2[2] = "edit"
+	t2[3] = "selection"
+
+	for index, value in ipairs(t1) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+	-- 3       selection
+
+	for index, value in ipairs(t2) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+	-- 3       selection
+end
+
+--[[
+	Lua also offers a special syntax to initialize a record-like table.
+	The original expression, however, is faster, because Lua creates the table already with the right size.
+]]
+do
+	-- faster
+	local t1 = {x = 10, y = 20}
+	print(t1.x, t1.y)							-- 10	20
+
+	-- be equivalent to:
+	local t2 = {}
+	t2.x = 10
+	t2["y"] = 20
+	print(t2.x, t2.y)							-- 10	20
+end
+
+--[[
+	We can mix record-style and list-style initializations in the same constructor.
+]]
+do
+	local polyline = {
+		color="blue",
+		thickness=2,
+		npoints=4,
+		{x=0,   y=0},    						-- polyline[1]
+		{x=-10, y=0},    						-- polyline[2]
+		{x=-10, y=1},    						-- polyline[3]
+		{x=0,   y=1}     						-- polyline[4]
+   }
+   print(polyline[2].x, polyline[2].y)			-- -10	0
+
+	--[[
+		Those two constructor forms have their limitations. For instance, we cannot initialize fields with negative indices,
+		nor with string indices that are not proper identifiers. For such needs, there is another, more general, format.
+		In this format, we explicitly write each index as an expression, between square brackets.
+	]]
+	local opnames = {["+"] = "add", ["-"] = "sub", ["*"] = "mul", ["/"] = "div"}
+	local i = 20
+	local s = "-"
+	local a = {[i + 0] = s, [i + 1] = s..s, [i + 2] = s .. s .. s}
+
+	print(opnames[s])    						-- sub
+	print(a[22])         						-- ---
+
+	-- We can always use a semicolon instead of a comma in a constructor.
+	-- This facility is a leftover from older Lua versions and it is seldom used nowadays.
+	local color = {r = 10; g = 20; b = 5}
+	print(color.r, color.g, color.b)			-- 10	20	 5
+end
+
+
