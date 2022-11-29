@@ -262,3 +262,21 @@ do
 	-- 5       go
 	-- 6       run
 end
+
+--[[
+	Some programming languages, such as C#, offer a safe navigation operator (written as ?. in C#). 
+	When we write a ?. b and a is nil, the result is also nil, instead of an error. Using that operator,
+	we could write our previous example like this:
+
+      zip = company?.director?.address?.zipcode
+
+	Lua does not offer a safe navigation operator,
+	However, we can emulate it in Lua with a bit of extra notation.
+]]
+do
+	local E = {}     			-- can be reused in other similar expressions
+    local company = _G.company
+
+    local zip = (((company or E).director or E).address or E).zipcode
+	print(zip)					-- nil
+end
