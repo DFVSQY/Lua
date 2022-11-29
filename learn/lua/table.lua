@@ -191,3 +191,74 @@ do
 	print(#color)								-- 0
 end
 
+--[[
+	We can traverse all key–value pairs in a table with the pairs iterator.
+
+	Due to the way that Lua implements tables, the order that elements appear in a traversal is undefined.
+	The same program can produce different orders each time it runs.
+	The only certainty is that each element will appear once during the traversal
+]]
+do
+	local t = {"file", "edit", name = "vscode", language = "en"}
+	for key, value in pairs(t) do
+		print(key, value)
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+	-- language        en
+	-- name    vscode
+end
+
+--[[
+	For lists, we can use the ipairs iterator.
+]]
+do
+	local t = {"file", "edit", "selection", "view", "go", "run"}
+	for index, value in ipairs(t) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+	-- 3       selection
+	-- 4       view
+	-- 5       go
+	-- 6       run
+
+	local tt = {
+		[1] = "file",
+		[2] = "edit",
+		[4] = "view",
+		[6] = "run"
+	}
+	for index, value in ipairs(tt) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+end
+
+--[[
+	Another way to traverse a sequence is with a numerical for.
+]]
+do
+	local t = {"file", "edit", "selection", "view", "go", "run"}
+	for i = 1, #t do
+		print(i, t[i])
+	end
+
+	-- output:
+	-- 1       file
+	-- 2       edit
+	-- 1       file
+	-- 2       edit
+	-- 3       selection
+	-- 4       view
+	-- 5       go
+	-- 6       run
+end
