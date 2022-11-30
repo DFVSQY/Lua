@@ -264,7 +264,7 @@ do
 end
 
 --[[
-	Some programming languages, such as C#, offer a safe navigation operator (written as ?. in C#). 
+	Some programming languages, such as C#, offer a safe navigation operator (written as ?. in C#).
 	When we write a ?. b and a is nil, the result is also nil, instead of an error. Using that operator,
 	we could write our previous example like this:
 
@@ -279,4 +279,104 @@ do
 
     local zip = (((company or E).director or E).address or E).zipcode
 	print(zip)					-- nil
+end
+
+--[[
+	The table library offers several useful functions to operate over lists and sequences.
+]]
+do
+	local t = {10, 30, 40, 50}
+	table.insert(t, 2, 20)
+	for index, value in ipairs(t) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       10
+	-- 2       20
+	-- 3       30
+	-- 4       40
+	-- 5       50
+
+	table.remove(t, 3)
+	for index, value in ipairs(t) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       10
+	-- 2       20
+	-- 3       40
+	-- 4       50
+
+	-- When called without a position, it removes the last element of the sequence.
+	table.remove(t)
+	for index, value in ipairs(t) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       10
+	-- 2       20
+	-- 3       40
+end
+
+--[[
+	Lua 5.3 has introduced a more general function for moving elements in a table.
+	The call table.move(a, f, e, t) moves the elements in table a from index f until e
+	(both inclusive) to position t.
+
+	Moves elements from table a1 to table a2, performing the equivalent to the following multiple assignment:
+	a2[t],... = a1[f],...,a1[e].
+	The default for a2 is a1.
+	The destination range can overlap with the source range.
+	The number of elements to be moved must fit in a Lua integer.
+]]
+do
+	local t = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+	local t1 = {}
+	table.move(t, 4, 8, 1, t1)
+	for index, value in ipairs(t1) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       4
+	-- 2       5
+	-- 3       6
+	-- 4       7
+	-- 5       8
+
+	table.move(t, 3, 5, 2)
+	for index, value in ipairs(t) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       1
+	-- 2       3
+	-- 3       4
+	-- 4       5
+	-- 5       5
+	-- 6       6
+	-- 7       7
+	-- 8       8
+	-- 9       9
+	-- 10      10
+
+	local tt1 = {4, 5, 6}
+	local tt2 = {1, 2, 3}
+	table.move(tt1, 1, #tt1, #tt2 + 1, tt2)
+	for index, value in ipairs(tt2) do
+		print(index, value)
+	end
+
+	-- output:
+	-- 1       1
+	-- 2       2
+	-- 3       3
+	-- 4       4
+	-- 5       5
+	-- 6       6
 end
