@@ -10,10 +10,10 @@ do
 end
 
 --[[
-	In both cases (expression and statement), a list of arguments enclosed in parentheses denotes the call; if the call has no arguments,
-	we still must write an empty list () to denote it. There is a special case to this rule: if the function has
-	one single argument and that argument is either a literal string or a table constructor, then the parentheses
-	are optional.
+	In both cases (expression and statement), a list of arguments enclosed in parentheses denotes the call;
+	if the call has no arguments, we still must write an empty list () to denote it. There is a special case to this rule:
+	if the function has one single argument and that argument is either a literal string or a table constructor,
+	then the parentheses are optional.
 ]]
 do
 	print "hello world"								-- hello world
